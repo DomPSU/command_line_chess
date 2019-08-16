@@ -45,6 +45,7 @@ class BoardSquare
 end
 
 class Display
+  include ChessConstants
 
   def display
     print_notation
@@ -237,6 +238,8 @@ class Display
 end
 
 class Board
+  include ChessConstants
+
   attr_accessor :l_array, :n_array, :board_array
 
   def initialize
