@@ -39,6 +39,134 @@ class BoardSquare
   end
 end
 
+class Display
+
+  def display
+    print unicode(top_left_corner)
+    print unicode(horizontal)
+    print unicode(horizontal)
+    puts unicode(top_mid)
+    print(vertical)
+    print(pawn)
+    print(" ")
+    puts(vertical)
+    print unicode(left_mid)
+    print unicode(horizontal)
+    print unicode(horizontal)
+    puts unicode(cross)
+  end
+
+  def print_top
+    print unicode(:top_left_corner)
+    print unicode(:horizontal)
+    print unicode(:horizontal)
+    print unicode(:top_mid)
+    print unicode(:horizontal)
+    print unicode(:horizontal)
+    print unicode(:top_mid)
+    print unicode(:horizontal)
+    print unicode(:horizontal)
+    print unicode(:top_mid)
+    print unicode(:horizontal)
+    print unicode(:horizontal)
+    print unicode(:top_mid)
+    print unicode(:horizontal)
+    print unicode(:horizontal)
+    print unicode(:top_mid)
+    print unicode(:horizontal)
+    print unicode(:horizontal)
+    print unicode(:top_mid)
+    print unicode(:horizontal)
+    print unicode(:horizontal)
+    print unicode(:top_mid)
+    print unicode(:horizontal)
+    print unicode(:horizontal)
+    print unicode(:top_right_corner)
+  end
+
+  def print_piece_row
+    print unicode(:vertical)
+    print unicode(:pawn)
+    print " "
+    print unicode(:vertical)
+    print unicode(:pawn)
+    print " "
+    print unicode(:vertical)
+    print unicode(:pawn)
+    print " "
+    print unicode(:vertical)
+    print unicode(:pawn)
+    print " "
+    print unicode(:vertical)
+    print unicode(:pawn)
+    print " "
+    print unicode(:vertical)
+    print unicode(:pawn)
+    print " "
+    print unicode(:vertical)
+    print unicode(:pawn)
+    print " "
+    print unicode(:vertical)
+    print unicode(:pawn)
+    print " "
+    print unicode(:vertical)
+  end
+   
+  def print_line_row #TODO change print_row to print_row(row_number)
+    print unicode(:left_mid)
+    print unicode(:horizontal)
+    print unicode(:horizontal)
+    print unicode(:cross)
+    print unicode(:horizontal)
+    print unicode(:horizontal)
+    print unicode(:cross)
+    print unicode(:horizontal)
+    print unicode(:horizontal)
+    print unicode(:cross)
+    print unicode(:horizontal)
+    print unicode(:horizontal)
+    print unicode(:cross)
+    print unicode(:horizontal)
+    print unicode(:horizontal)
+    print unicode(:cross)
+    print unicode(:horizontal)
+    print unicode(:horizontal)
+    print unicode(:cross)
+    print unicode(:horizontal)
+    print unicode(:horizontal)
+    print unicode(:cross)
+    print unicode(:horizontal)
+    print unicode(:horizontal)
+    print unicode(:right_mid)
+  end
+
+  def print_bottom_row
+  end
+
+  def unicode(key)
+    hash = { horizontal: "\u2500",
+             vertical: "\u2502",
+             top_left_corner: "\u250C",
+             top_right_corner: "\u2510",
+             bottom_left_corner: "\u2514",
+             bottom_right_corner: "\u2518",
+             top_mid: "\u252c",
+             left_mid: "\u251c",
+             right_mid: "\u2524",
+             bottom_mid: "\u2534",
+             cross: "\u253c",
+             king: "\u265A",
+             queen: "\u265B",
+             rookt: "\u265C",
+             bishop: "\u265D",
+             knight: "\u265E",
+             pawn: "\u265F"
+           }
+  
+    return hash.fetch(key).encode('utf-8')
+  end
+end
+
 class Board
   attr_accessor :l_array, :n_array, :board_array
 
@@ -190,5 +318,15 @@ end
 
 class Pawn
 end
+
+board = Board.new()
+
+display = Display.new()
+
+display.print_top
+puts("")
+display.print_piece_row
+puts("")
+display.print_line_row
 
 
