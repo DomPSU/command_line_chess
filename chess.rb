@@ -47,21 +47,26 @@ end
 class Display
 
   def display
-    print unicode(top_left_corner)
-    print unicode(horizontal)
-    print unicode(horizontal)
-    puts unicode(top_mid)
-    print(vertical)
-    print(pawn)
-    print(" ")
-    puts(vertical)
-    print unicode(left_mid)
-    print unicode(horizontal)
-    print unicode(horizontal)
-    puts unicode(cross)
+    print_top_row
+    print_piece_row
+    print_line_row
+    print_piece_row
+    print_line_row
+    print_piece_row
+    print_line_row
+    print_piece_row
+    print_line_row
+    print_piece_row
+    print_line_row
+    print_piece_row
+    print_line_row
+    print_piece_row
+    print_line_row
+    print_piece_row
+    print_bottom_row
   end
 
-  def print_top
+  def print_top_row
     print unicode(:top_left_corner)
     print unicode(:horizontal)
     print unicode(:horizontal)
@@ -86,7 +91,7 @@ class Display
     print unicode(:top_mid)
     print unicode(:horizontal)
     print unicode(:horizontal)
-    print unicode(:top_right_corner)
+    puts unicode(:top_right_corner)
   end
 
   def print_piece_row
@@ -114,7 +119,7 @@ class Display
     print unicode(:vertical)
     print unicode(:rook)
     print " "
-    print unicode(:vertical)
+    puts unicode(:vertical)
   end
    
   def print_line_row #TODO change print_row to print_row(row_number)
@@ -142,10 +147,35 @@ class Display
     print unicode(:cross)
     print unicode(:horizontal)
     print unicode(:horizontal)
-    print unicode(:right_mid)
+    puts unicode(:right_mid)
   end
 
   def print_bottom_row
+    print unicode(:bottom_left_corner)
+    print unicode(:horizontal)
+    print unicode(:horizontal)
+    print unicode(:bottom_mid)
+    print unicode(:horizontal)
+    print unicode(:horizontal)
+    print unicode(:bottom_mid)
+    print unicode(:horizontal)
+    print unicode(:horizontal)
+    print unicode(:bottom_mid)
+    print unicode(:horizontal)
+    print unicode(:horizontal)
+    print unicode(:bottom_mid)
+    print unicode(:horizontal)
+    print unicode(:horizontal)
+    print unicode(:bottom_mid)
+    print unicode(:horizontal)
+    print unicode(:horizontal)
+    print unicode(:bottom_mid)
+    print unicode(:horizontal)
+    print unicode(:horizontal)
+    print unicode(:bottom_mid)
+    print unicode(:horizontal)
+    print unicode(:horizontal)
+    puts unicode(:bottom_right_corner)
   end
 
   def unicode(key)
@@ -328,10 +358,6 @@ board = Board.new()
 
 display = Display.new()
 
-display.print_top
-puts("")
-display.print_piece_row
-puts("")
-display.print_line_row
+display.display
 
 
