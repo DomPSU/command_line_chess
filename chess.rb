@@ -156,33 +156,22 @@ class Display
   end
 
   def print_bottom_row
-    print "  "
 
+    counter = 0
+
+    print "  "
     print unicode(:bottom_left_corner)
     print unicode(:horizontal)
     print unicode(:horizontal)
-    print unicode(:bottom_mid)
-    print unicode(:horizontal)
-    print unicode(:horizontal)
-    print unicode(:bottom_mid)
-    print unicode(:horizontal)
-    print unicode(:horizontal)
-    print unicode(:bottom_mid)
-    print unicode(:horizontal)
-    print unicode(:horizontal)
-    print unicode(:bottom_mid)
-    print unicode(:horizontal)
-    print unicode(:horizontal)
-    print unicode(:bottom_mid)
-    print unicode(:horizontal)
-    print unicode(:horizontal)
-    print unicode(:bottom_mid)
-    print unicode(:horizontal)
-    print unicode(:horizontal)
-    print unicode(:bottom_mid)
-    print unicode(:horizontal)
-    print unicode(:horizontal)
-    puts unicode(:bottom_right_corner)
+
+    loop do
+      print unicode(:bottom_mid)
+      print unicode(:horizontal)
+      print unicode(:horizontal)
+      counter += 1
+      break if counter == NUMBER_OF_COLUMNS - 1
+    end
+    puts unicode(:bottom_right_corner)  
   end
 
   def unicode(key)
