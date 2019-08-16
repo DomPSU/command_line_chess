@@ -7,10 +7,11 @@ module ChessConstants
 end
 
 class GameControl
-  attr_accessor :board, :current_player
+  attr_accessor :board, :display, :current_player
   
   def initialize(board)
     @board = Board.new
+    @display = Display.new(@board)
     @current_player = nil
   end
 end
@@ -50,7 +51,13 @@ end
 class Display
   include ChessConstants
 
-  def display
+  attr_accessor :board
+
+  def initialize(board)
+    @board = board
+  end
+
+  def contents()
     print_notation
     print_top_row
     print_piece_row("8")
@@ -79,32 +86,20 @@ class Display
   end
 
   def print_top_row
-    print "  "
+    counter = 0
 
+    print "  "
     print unicode(:top_left_corner)
     print unicode(:horizontal)
     print unicode(:horizontal)
-    print unicode(:top_mid)
-    print unicode(:horizontal)
-    print unicode(:horizontal)
-    print unicode(:top_mid)
-    print unicode(:horizontal)
-    print unicode(:horizontal)
-    print unicode(:top_mid)
-    print unicode(:horizontal)
-    print unicode(:horizontal)
-    print unicode(:top_mid)
-    print unicode(:horizontal)
-    print unicode(:horizontal)
-    print unicode(:top_mid)
-    print unicode(:horizontal)
-    print unicode(:horizontal)
-    print unicode(:top_mid)
-    print unicode(:horizontal)
-    print unicode(:horizontal)
-    print unicode(:top_mid)
-    print unicode(:horizontal)
-    print unicode(:horizontal)
+
+    loop do
+      print unicode(:top_mid)
+      print unicode(:horizontal)
+      print unicode(:horizontal)
+      counter += 1
+      break if counter == NUMBER_OF_COLUMNS - 1
+    end
     puts unicode(:top_right_corner)
   end
 
@@ -380,8 +375,9 @@ end
 
 board = Board.new()
 
-display = Display.new()
+display = Display.new(board)
 
-display.display
+display.contents
+
 
 
