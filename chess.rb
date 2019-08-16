@@ -47,26 +47,50 @@ end
 class Display
 
   def display
+    print_notation
     print_top_row
-    print_piece_row
+    print_piece_row("8")
     print_line_row
-    print_piece_row
+    print_piece_row("7")
     print_line_row
-    print_piece_row
+    print_piece_row("6")
     print_line_row
-    print_piece_row
+    print_piece_row("5")
     print_line_row
-    print_piece_row
+    print_piece_row("4")
     print_line_row
-    print_piece_row
+    print_piece_row("3")
     print_line_row
-    print_piece_row
+    print_piece_row("2")
     print_line_row
-    print_piece_row
+    print_piece_row("1")
     print_bottom_row
+    print_notation
+  end
+
+  def print_notation
+    print "   "
+    print "a"
+    print "  "
+    print "b"
+    print "  "
+    print "c"
+    print "  "
+    print "d"
+    print "  "
+    print "e"
+    print "  "
+    print "f"
+    print "  "
+    print "g"
+    print "  "
+    print "h"
+    puts ""
   end
 
   def print_top_row
+    print "  "
+
     print unicode(:top_left_corner)
     print unicode(:horizontal)
     print unicode(:horizontal)
@@ -94,7 +118,10 @@ class Display
     puts unicode(:top_right_corner)
   end
 
-  def print_piece_row
+  def print_piece_row (notation)
+    print(notation)
+    print " "
+
     print unicode(:vertical)
     print unicode(:rook)
     print " "
@@ -119,10 +146,15 @@ class Display
     print unicode(:vertical)
     print unicode(:rook)
     print " "
-    puts unicode(:vertical)
+    print unicode(:vertical)
+
+    print " "
+    puts(notation)
   end
    
   def print_line_row #TODO change print_row to print_row(row_number)
+    print "  "
+
     print unicode(:left_mid)
     print unicode(:horizontal)
     print unicode(:horizontal)
@@ -151,6 +183,8 @@ class Display
   end
 
   def print_bottom_row
+    print "  "
+
     print unicode(:bottom_left_corner)
     print unicode(:horizontal)
     print unicode(:horizontal)
