@@ -103,7 +103,7 @@ class Display
     puts unicode(:top_right_corner)
   end
 
-  def print_piece_row (notation)
+  def print_piece_row (notation) #TODO change print_row to print_row(row_number)
     print(notation)
     print " "
 
@@ -137,34 +137,22 @@ class Display
     puts(notation)
   end
    
-  def print_line_row #TODO change print_row to print_row(row_number)
-    print "  "
+  def print_line_row
+    counter = 0
 
+    print "  "
     print unicode(:left_mid)
     print unicode(:horizontal)
     print unicode(:horizontal)
-    print unicode(:cross)
-    print unicode(:horizontal)
-    print unicode(:horizontal)
-    print unicode(:cross)
-    print unicode(:horizontal)
-    print unicode(:horizontal)
-    print unicode(:cross)
-    print unicode(:horizontal)
-    print unicode(:horizontal)
-    print unicode(:cross)
-    print unicode(:horizontal)
-    print unicode(:horizontal)
-    print unicode(:cross)
-    print unicode(:horizontal)
-    print unicode(:horizontal)
-    print unicode(:cross)
-    print unicode(:horizontal)
-    print unicode(:horizontal)
-    print unicode(:cross)
-    print unicode(:horizontal)
-    print unicode(:horizontal)
-    puts unicode(:right_mid)
+
+    loop do
+      print unicode(:cross)
+      print unicode(:horizontal)
+      print unicode(:horizontal)
+      counter += 1
+      break if counter == NUMBER_OF_COLUMNS - 1
+    end
+    puts unicode(:right_mid)    
   end
 
   def print_bottom_row
