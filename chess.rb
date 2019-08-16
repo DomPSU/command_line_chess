@@ -1,4 +1,10 @@
 class GameControl
+  attr_accessor :board, :current_player
+  
+  def initialize(board)
+    @board = Board.new
+    @current_player = nil
+  end
 end
 
 class Player
