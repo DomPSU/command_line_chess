@@ -7,13 +7,172 @@ class GameControl
   end
 end
 
+class Node
+  attr_accessor :parent, :l_notation, :n_notation, :child_array
+
+  def initialize (parent = nil, l_notation = nil, n_notation = nil, 
+                  child_array = nil)
+
+    @parent = parent
+    @l_notation = l_notation
+    @n_notation = n_notation
+    @child_array = child_array
+  end
+end
+
+class BoardSquare
+  attr_accessor :l_notation, :n_notation, :color, :piece, :piece_color
+
+  def initialize(l_notation, n_notation, color, piece = nil, piece_color = nil)
+    @l_notation = l_notation
+    @n_notation = n_notation
+    @color = color
+    @piece = piece
+    @piece_color = piece_color
+  end
+
+  def info #TODO test function delete when finished
+    print "#{@l_notation} #{@n_notation} #{@color} #{@piece} #{@piece_color}"
+    print " nil " if @piece.nil?
+    print " nil " if @piece_color.nil?
+    puts("")
+  end
+end
+
+class Board
+  attr_accessor :l_array, :n_array, :display_array
+
+  def initialize
+    @l_array = ["a", "b", "c", "d", "e", "f", "g", "h"]
+    @n_array = [1, 2, 3, 4, 5, 6, 7, 8]
+    @display_array = Array.new(8) {Array.new(8)}
+
+    @display_array[0][0] = BoardSquare.new("a", 8, "white")
+    @display_array[0][1] = BoardSquare.new("b", 8, "black")
+    @display_array[0][2] = BoardSquare.new("c", 8, "white")
+    @display_array[0][3] = BoardSquare.new("d", 8, "black")
+    @display_array[0][4] = BoardSquare.new("e", 8, "white")
+    @display_array[0][5] = BoardSquare.new("f", 8, "black")
+    @display_array[0][6] = BoardSquare.new("g", 8, "white")
+    @display_array[0][7] = BoardSquare.new("h", 8, "black")
+
+    @display_array[1][0] = BoardSquare.new("a", 7, "black")
+    @display_array[1][1] = BoardSquare.new("b", 7, "white")
+    @display_array[1][2] = BoardSquare.new("c", 7, "black")
+    @display_array[1][3] = BoardSquare.new("d", 7, "white")
+    @display_array[1][4] = BoardSquare.new("e", 7, "black")
+    @display_array[1][5] = BoardSquare.new("f", 7, "white")
+    @display_array[1][6] = BoardSquare.new("g", 7, "black")
+    @display_array[1][7] = BoardSquare.new("h", 7, "white")
+
+    @display_array[2][0] = BoardSquare.new("a", 6, "white")
+    @display_array[2][1] = BoardSquare.new("b", 6, "black")
+    @display_array[2][2] = BoardSquare.new("c", 6, "white")
+    @display_array[2][3] = BoardSquare.new("d", 6, "black")
+    @display_array[2][4] = BoardSquare.new("e", 6, "white")
+    @display_array[2][5] = BoardSquare.new("f", 6, "black")
+    @display_array[2][6] = BoardSquare.new("g", 6, "white")
+    @display_array[2][7] = BoardSquare.new("h", 6, "black")
+
+    @display_array[3][0] = BoardSquare.new("a", 5, "black")
+    @display_array[3][1] = BoardSquare.new("b", 5, "white")
+    @display_array[3][2] = BoardSquare.new("c", 5, "black")
+    @display_array[3][3] = BoardSquare.new("d", 5, "white")
+    @display_array[3][4] = BoardSquare.new("e", 5, "black")
+    @display_array[3][5] = BoardSquare.new("f", 5, "white")
+    @display_array[3][6] = BoardSquare.new("g", 5, "black")
+    @display_array[3][7] = BoardSquare.new("h", 5, "white")
+
+    @display_array[4][0] = BoardSquare.new("a", 4, "white")
+    @display_array[4][1] = BoardSquare.new("b", 4, "black")
+    @display_array[4][2] = BoardSquare.new("c", 4, "white")
+    @display_array[4][3] = BoardSquare.new("d", 4, "black")
+    @display_array[4][4] = BoardSquare.new("e", 4, "white")
+    @display_array[4][5] = BoardSquare.new("f", 4, "black")
+    @display_array[4][6] = BoardSquare.new("g", 4, "white")
+    @display_array[4][7] = BoardSquare.new("h", 4, "black")
+
+    @display_array[5][0] = BoardSquare.new("a", 3, "black")
+    @display_array[5][1] = BoardSquare.new("b", 3, "white")
+    @display_array[5][2] = BoardSquare.new("c", 3, "black")
+    @display_array[5][3] = BoardSquare.new("d", 3, "white")
+    @display_array[5][4] = BoardSquare.new("e", 3, "black")
+    @display_array[5][5] = BoardSquare.new("f", 3, "white")
+    @display_array[5][6] = BoardSquare.new("g", 3, "black")
+    @display_array[5][7] = BoardSquare.new("h", 3, "white")
+
+    @display_array[6][0] = BoardSquare.new("a", 2, "white")
+    @display_array[6][1] = BoardSquare.new("b", 2, "black")
+    @display_array[6][2] = BoardSquare.new("c", 2, "white")
+    @display_array[6][3] = BoardSquare.new("d", 2, "black")
+    @display_array[6][4] = BoardSquare.new("e", 2, "white")
+    @display_array[6][5] = BoardSquare.new("f", 2, "black")
+    @display_array[6][6] = BoardSquare.new("g", 2, "white")
+    @display_array[6][7] = BoardSquare.new("h", 2, "black")
+
+    @display_array[7][0] = BoardSquare.new("a", 1, "black")
+    @display_array[7][1] = BoardSquare.new("b", 1, "white")
+    @display_array[7][2] = BoardSquare.new("c", 1, "black")
+    @display_array[7][3] = BoardSquare.new("d", 1, "white")
+    @display_array[7][4] = BoardSquare.new("e", 1, "black")
+    @display_array[7][5] = BoardSquare.new("f", 1, "white")
+    @display_array[7][6] = BoardSquare.new("g", 1, "black")
+    @display_array[7][7] = BoardSquare.new("h", 1, "white")
+  end
+
+  def get_square_from_notation(l_notation, n_notation)
+    @display_array.each do |sub_array|        
+      sub_array.each do |board_square|
+           if ((board_square.l_notation == l_notation)\
+             && (board_square.n_notation == n_notation))
+        
+            return board_square
+          end
+      end
+    end
+  end
+
+  def square_notation_exists?(l_notation, n_notation)
+    return true if @letter_array.include?(l_notation) && 
+                   @number_array.include?(n_notation)
+
+    return false
+  end
+
+  def get_square_from_index(l_n_index, n_n_index)
+    @display_array.each do |sub_array|        
+      sub_array.each do |board_square|
+           if ((@l_array.index(board_square.l_notation) == l_n_index)\
+             && (@n_array.index(board_square.n_notation) == n_n_index))
+        
+            return board_square
+          end
+      end
+    end
+  end
+
+  def square_index_exists?(l_n_index, n_n_index)
+      return true if (l_n_index.between?(0, 7) && n_n_index.between?(0, 7))
+
+      return false
+  end
+
+  def display_info #TODO test function delete when finished
+    self.display_array.each do |sub_array|   
+      puts("")     
+      sub_array.each do |board_square|
+         board_square.info
+      end
+    end
+  end
+end
+
+
+
 class Player
 end
 
 class Computer
-end
-
-class Board
 end
 
 class Rook
