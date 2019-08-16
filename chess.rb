@@ -1,3 +1,8 @@
+module ChessConstants
+  NUMBER_OF_ROWS = 8
+  NUMBER_OF_COLUMNS = 8
+end
+
 class GameControl
   attr_accessor :board, :current_player
   
@@ -86,28 +91,28 @@ class Display
 
   def print_piece_row
     print unicode(:vertical)
-    print unicode(:pawn)
+    print unicode(:rook)
     print " "
     print unicode(:vertical)
-    print unicode(:pawn)
+    print unicode(:knight)
     print " "
     print unicode(:vertical)
-    print unicode(:pawn)
+    print unicode(:bishop)
     print " "
     print unicode(:vertical)
-    print unicode(:pawn)
+    print unicode(:queen)
     print " "
     print unicode(:vertical)
-    print unicode(:pawn)
+    print unicode(:king)
     print " "
     print unicode(:vertical)
-    print unicode(:pawn)
+    print unicode(:bishop)
     print " "
     print unicode(:vertical)
-    print unicode(:pawn)
+    print unicode(:knight)
     print " "
     print unicode(:vertical)
-    print unicode(:pawn)
+    print unicode(:rook)
     print " "
     print unicode(:vertical)
   end
@@ -157,7 +162,7 @@ class Display
              cross: "\u253c",
              king: "\u265A",
              queen: "\u265B",
-             rookt: "\u265C",
+             rook: "\u265C",
              bishop: "\u265D",
              knight: "\u265E",
              pawn: "\u265F"
