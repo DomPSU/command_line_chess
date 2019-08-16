@@ -1,6 +1,9 @@
 module ChessConstants
   NUMBER_OF_ROWS = 8
   NUMBER_OF_COLUMNS = 8
+  
+  L_ARRAY = ["a", "b", "c", "d", "e", "f", "g", "h"]
+  N_ARRAY = [1, 2, 3, 4, 5, 6, 7, 8]
 end
 
 class GameControl
@@ -240,11 +243,9 @@ end
 class Board
   include ChessConstants
 
-  attr_accessor :l_array, :n_array, :board_array
+  attr_accessor :board_array
 
   def initialize
-    @l_array = ["a", "b", "c", "d", "e", "f", "g", "h"]
-    @n_array = [1, 2, 3, 4, 5, 6, 7, 8]
     @board_array = Array.new(8) {Array.new(8)}
 
     @board_array[0][0] = BoardSquare.new("a", 8, "white", "rook", "black")
@@ -341,8 +342,8 @@ class Board
   def get_square_from_index(l_n_index, n_n_index)
     @board_array.each do |sub_array|        
       sub_array.each do |board_square|
-           if ((@l_array.index(board_square.l_notation) == l_n_index)\
-             && (@n_array.index(board_square.n_notation) == n_n_index))
+           if ((L_ARRAY.index(board_square.l_notation) == l_n_index)\
+             && (N_ARRAY.index(board_square.n_notation) == n_n_index))
         
             return board_square
           end
