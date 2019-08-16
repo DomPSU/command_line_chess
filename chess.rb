@@ -74,21 +74,7 @@ class Display
 
   def print_notation
     print "   "
-    print "a"
-    print "  "
-    print "b"
-    print "  "
-    print "c"
-    print "  "
-    print "d"
-    print "  "
-    print "e"
-    print "  "
-    print "f"
-    print "  "
-    print "g"
-    print "  "
-    print "h"
+    L_ARRAY.each { |value| print "#{value}  "}
     puts ""
   end
 
