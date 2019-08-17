@@ -58,7 +58,7 @@ class Display
   end
 
   def contents
-    print_notation
+    print_l_notation
     print_top_row
 
     N_ARRAY.reverse.each do |value|
@@ -67,10 +67,10 @@ class Display
     end
 
     print_bottom_row
-    print_notation
+    print_l_notation
   end
 
-  def print_notation
+  def print_l_notation
     print "   "
     L_ARRAY.each { |value| print "#{value}  "}
     puts ""
