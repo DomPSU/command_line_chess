@@ -57,24 +57,15 @@ class Display
     @board = board
   end
 
-  def contents()
+  def contents
     print_notation
     print_top_row
-    print_piece_row("8")
-    print_line_row
-    print_piece_row("7")
-    print_line_row
-    print_piece_row("6")
-    print_line_row
-    print_piece_row("5")
-    print_line_row
-    print_piece_row("4")
-    print_line_row
-    print_piece_row("3")
-    print_line_row
-    print_piece_row("2")
-    print_line_row
-    print_piece_row("1")
+
+    N_ARRAY.reverse.each do |value|
+      print_piece_row(value)
+      print_line_row unless value == N_ARRAY[0]
+    end
+
     print_bottom_row
     print_notation
   end
@@ -103,7 +94,7 @@ class Display
     puts unicode(:top_right_corner)
   end
 
-  def print_piece_row (notation) #TODO change print_row to print_row(row_number)
+  def print_piece_row(notation) #TODO change print_row to print_row(row_number)
     print(notation)
     print " "
 
@@ -155,7 +146,7 @@ class Display
     puts unicode(:right_mid)    
   end
 
-  def print_bottom_row
+  def print_bottom_row 
 
     counter = 0
 
@@ -174,7 +165,7 @@ class Display
     puts unicode(:bottom_right_corner)  
   end
 
-  def unicode(key)
+  def unicode(key) #TODO
     hash = { horizontal: "\u2500",
              vertical: "\u2502",
              top_left_corner: "\u250C",
