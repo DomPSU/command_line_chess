@@ -80,49 +80,49 @@ class Display
     counter = 0
 
     print "  "
-    print unicode(:top_left_corner)
-    print unicode(:horizontal)
-    print unicode(:horizontal)
+    print unicode_board(:top_left_corner)
+    print unicode_board(:horizontal)
+    print unicode_board(:horizontal)
 
     loop do
-      print unicode(:top_mid)
-      print unicode(:horizontal)
-      print unicode(:horizontal)
+      print unicode_board(:top_mid)
+      print unicode_board(:horizontal)
+      print unicode_board(:horizontal)
       counter += 1
       break if counter == NUMBER_OF_COLUMNS - 1
     end
-    puts unicode(:top_right_corner)
+    puts unicode_board(:top_right_corner)
   end
 
   def print_piece_row(notation) #TODO change print_row to print_row(row_number)
     print(notation)
     print " "
 
-    print unicode(:vertical)
-    print unicode(:rook)
+    print unicode_board(:vertical)
+    print unicode_board(:rook)
     print " "
-    print unicode(:vertical)
-    print unicode(:knight)
+    print unicode_board(:vertical)
+    print unicode_board(:knight)
     print " "
-    print unicode(:vertical)
-    print unicode(:bishop)
+    print unicode_board(:vertical)
+    print unicode_board(:bishop)
     print " "
-    print unicode(:vertical)
-    print unicode(:queen)
+    print unicode_board(:vertical)
+    print unicode_board(:queen)
     print " "
-    print unicode(:vertical)
-    print unicode(:king)
+    print unicode_board(:vertical)
+    print unicode_board(:king)
     print " "
-    print unicode(:vertical)
-    print unicode(:bishop)
+    print unicode_board(:vertical)
+    print unicode_board(:bishop)
     print " "
-    print unicode(:vertical)
-    print unicode(:knight)
+    print unicode_board(:vertical)
+    print unicode_board(:knight)
     print " "
-    print unicode(:vertical)
-    print unicode(:rook)
+    print unicode_board(:vertical)
+    print unicode_board(:rook)
     print " "
-    print unicode(:vertical)
+    print unicode_board(:vertical)
 
     print " "
     puts(notation)
@@ -132,18 +132,18 @@ class Display
     counter = 0
 
     print "  "
-    print unicode(:left_mid)
-    print unicode(:horizontal)
-    print unicode(:horizontal)
+    print unicode_board(:left_mid)
+    print unicode_board(:horizontal)
+    print unicode_board(:horizontal)
 
     loop do
-      print unicode(:cross)
-      print unicode(:horizontal)
-      print unicode(:horizontal)
+      print unicode_board(:cross)
+      print unicode_board(:horizontal)
+      print unicode_board(:horizontal)
       counter += 1
       break if counter == NUMBER_OF_COLUMNS - 1
     end
-    puts unicode(:right_mid)    
+    puts unicode_board(:right_mid)    
   end
 
   def print_bottom_row 
@@ -151,41 +151,60 @@ class Display
     counter = 0
 
     print "  "
-    print unicode(:bottom_left_corner)
-    print unicode(:horizontal)
-    print unicode(:horizontal)
+    print unicode_board(:bottom_left_corner)
+    print unicode_board(:horizontal)
+    print unicode_board(:horizontal)
 
     loop do
-      print unicode(:bottom_mid)
-      print unicode(:horizontal)
-      print unicode(:horizontal)
+      print unicode_board(:bottom_mid)
+      print unicode_board(:horizontal)
+      print unicode_board(:horizontal)
       counter += 1
       break if counter == NUMBER_OF_COLUMNS - 1
     end
-    puts unicode(:bottom_right_corner)  
+    puts unicode_board(:bottom_right_corner)  
   end
 
-  def unicode(key) #TODO
-    hash = { horizontal: "\u2500",
-             vertical: "\u2502",
-             top_left_corner: "\u250C",
-             top_right_corner: "\u2510",
-             bottom_left_corner: "\u2514",
-             bottom_right_corner: "\u2518",
-             top_mid: "\u252c",
-             left_mid: "\u251c",
-             right_mid: "\u2524",
-             bottom_mid: "\u2534",
-             cross: "\u253c",
-             king: "\u265A",
-             queen: "\u265B",
-             rook: "\u265C",
-             bishop: "\u265D",
-             knight: "\u265E",
-             pawn: "\u265F"
-           }
+  def unicode_board(key) #TODO
+    hash = {horizontal: "\u2500",
+            vertical: "\u2502",
+            top_left_corner: "\u250C",
+            top_right_corner: "\u2510",
+            bottom_left_corner: "\u2514",
+            bottom_right_corner: "\u2518",
+            top_mid: "\u252c",
+            left_mid: "\u251c",
+            right_mid: "\u2524",
+            bottom_mid: "\u2534",
+            cross: "\u253c",
+            king: "\u265A",
+            queen: "\u265B",
+            rook: "\u265C",
+            bishop: "\u265D",
+            knight: "\u265E",
+            pawn: "\u265F"}
   
-    return hash.fetch(key).encode('utf-8')
+    return hash.fetch(key).encode('utf-8')   
+  end
+
+  def unicode_piece(key, color)
+    white_hash = {king: "\u2654",
+                  queen: "\u2655",
+                  rook: "\u2656",
+                  bishop: "\u2657",
+                  knight: "\u2658",
+                  pawn: "\u2659"}
+
+   return white_hash.fetch(key).encode('utf-8') if color == "white"
+
+    black_hash = {king: "\u265A",
+                  queen: "\u265B",
+                  rook: "\u265C",
+                  bishop: "\u265D",
+                  knight: "\u265E",
+                  pawn: "\u265F"}
+
+    return black_hash.fetch(key).encode('utf-8') if color == "black"
   end
 end
 
