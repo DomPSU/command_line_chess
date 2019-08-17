@@ -187,7 +187,7 @@ class Display
     return hash.fetch(key).encode('utf-8')   
   end
 
-  def unicode_piece(key, color)
+  def unicode_piece(key, piece_color)
     white_hash = {king: "\u2654",
                   queen: "\u2655",
                   rook: "\u2656",
@@ -195,7 +195,7 @@ class Display
                   knight: "\u2658",
                   pawn: "\u2659"}
 
-   return white_hash.fetch(key).encode('utf-8') if color == "white"
+   return white_hash.fetch(key).encode('utf-8') if piece_color == "white"
 
     black_hash = {king: "\u265A",
                   queen: "\u265B",
@@ -204,7 +204,7 @@ class Display
                   knight: "\u265E",
                   pawn: "\u265F"}
 
-    return black_hash.fetch(key).encode('utf-8') if color == "black"
+    return black_hash.fetch(key).encode('utf-8') if piece_color == "black"
   end
 end
 
