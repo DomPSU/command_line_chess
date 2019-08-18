@@ -317,6 +317,98 @@ class Board
   end
 end
 
+class Knight
+  attr_accessor :board, :board_square
+
+  def initialize(l_notation, n_notation, piece_color, board)
+    @board = board
+    @board_square = @board.get_square_from_notation(l_notation, n_notation)
+    @board_square.piece = "knight"
+    @board_square.piece_color = piece_color
+  end
+
+
+  def build_move_tree(start_square, final_square)
+    root = Node.new(nil, start_square.l_notation, start_square.n_notation)
+    
+    queue = [root]
+    current_node = queue[0]
+
+    while node_equal_to_square?(current_node, final_square) == false
+      add_children_to_queue(current_node, queue)
+      queue.shift
+      current_node = queue[0]
+    end
+    return current_node
+  end
+
+  def node_equal_to_square?(node, square)
+    return true if ((node.l_notation == square.l_notation) && 
+                   (node.n_notation == square.n_notation))
+
+    return false
+  end
+
+  def get_all_moves(node)
+    move_array = [node]
+    
+    while move_array[-1].parent != nil
+      move_array << move_array[-1].parent
+    end
+    return move_array.reverse
+  end
+
+  def move(start_square_array, end_square_array)
+    s_s_l_n = start_square_array[0]
+    s_s_n_n = start_square_array[1]
+
+    e_s_l_n = end_square_array[0]
+    e_s_n_n = end_square_array[1]
+
+    start_square = @board.get_square_from_notation(s_s_l_n, s_s_n_n)
+    end_square = @board.get_square_from_notation(e_s_l_n, e_s_n_n)
+
+    move_array = get_all_moves(build_move_tree(start_square, end_square))
+    
+    puts("You made it in #{move_array.size} moves! Here is your path:")
+    
+    move_array.each{|square| puts("#{square.l_notation} #{square.n_notation}")}
+  end
+
+  def add_children_to_queue(parent, queue)
+    parent.child_array = get_child_array(parent)
+    parent.child_array.each do |child|
+      queue << Node.new(parent, child.l_notation, child.n_notation)
+    end
+  end
+
+  def get_child_array(parent = @board_square)
+    child_array = []
+    parent_l_n_index = @board.l_array.index(parent.l_notation)
+    parent_n_n_index = @board.n_array.index(parent.n_notation)
+
+    child_array << nil_unless_exists(parent_l_n_index + 1, parent_n_n_index + 2)
+    child_array << nil_unless_exists(parent_l_n_index + 2, parent_n_n_index + 1)
+
+    child_array << nil_unless_exists(parent_l_n_index + 2, parent_n_n_index - 1)
+    child_array << nil_unless_exists(parent_l_n_index + 1, parent_n_n_index - 2)
+
+    child_array << nil_unless_exists(parent_l_n_index - 1, parent_n_n_index - 2)
+    child_array << nil_unless_exists(parent_l_n_index - 2, parent_n_n_index - 1)
+
+    child_array << nil_unless_exists(parent_l_n_index - 2, parent_n_n_index + 1) 
+    child_array << nil_unless_exists(parent_l_n_index - 1, parent_n_n_index + 2)
+
+    return child_array.compact
+  end
+
+  def nil_unless_exists(new_l_n_index, new_n_n_index)
+    if @board.square_index_exists?(new_l_n_index, new_n_n_index)
+      return @board.get_square_from_index(new_l_n_index, new_n_n_index)
+    end
+  end
+end
+
 
 class Player
 end
@@ -325,9 +417,6 @@ class Computer
 end
 
 class Rook
-end
-
-class Knight
 end
 
 class Bishop
