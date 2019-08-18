@@ -61,7 +61,7 @@ class Display
     print_l_notation
     print_top_row
 
-    N_ARRAY.reverse.each do |value|
+    N_ARRAY.reverse.each do |value| 
       print_piece_row(value)
       print_line_row unless value == N_ARRAY[0]
     end
@@ -94,38 +94,25 @@ class Display
     puts unicode_board(:top_right_corner)
   end
 
-  def print_piece_row(notation) #TODO change print_row to print_row(row_number)
-    print(notation)
+  def print_piece_row(n_notation) 
+    print(n_notation)
     print " "
 
-    print unicode_board(:vertical)
-    print unicode_board(:rook)
-    print " "
-    print unicode_board(:vertical)
-    print unicode_board(:knight)
-    print " "
-    print unicode_board(:vertical)
-    print unicode_board(:bishop)
-    print " "
-    print unicode_board(:vertical)
-    print unicode_board(:queen)
-    print " "
-    print unicode_board(:vertical)
-    print unicode_board(:king)
-    print " "
-    print unicode_board(:vertical)
-    print unicode_board(:bishop)
-    print " "
-    print unicode_board(:vertical)
-    print unicode_board(:knight)
-    print " "
-    print unicode_board(:vertical)
-    print unicode_board(:rook)
-    print " "
+    @board.board_array[NUMBER_OF_ROWS-n_notation].each do |board_square|
+      print unicode_board(:vertical)
+
+      if board_square.piece.nil?
+        print " "
+      else
+        print unicode_piece(board_square.piece, board_square.piece_color)
+      end
+      print " "
+    end
+
     print unicode_board(:vertical)
 
     print " "
-    puts(notation)
+    puts(n_notation)
   end
    
   def print_line_row
@@ -165,7 +152,7 @@ class Display
     puts unicode_board(:bottom_right_corner)  
   end
 
-  def unicode_board(key) #TODO
+  def unicode_board(key)
     hash = {horizontal: "\u2500",
             vertical: "\u2502",
             top_left_corner: "\u250C",
@@ -176,14 +163,8 @@ class Display
             left_mid: "\u251c",
             right_mid: "\u2524",
             bottom_mid: "\u2534",
-            cross: "\u253c",
-            king: "\u265A",
-            queen: "\u265B",
-            rook: "\u265C",
-            bishop: "\u265D",
-            knight: "\u265E",
-            pawn: "\u265F"}
-  
+            cross: "\u253c"}
+
     return hash.fetch(key).encode('utf-8')   
   end
 
@@ -216,22 +197,23 @@ class Board
   def initialize
     @board_array = Array.new(8) {Array.new(8)}
 
-    @board_array[0][0] = BoardSquare.new("a", 8, "white", "rook", "black")
-    @board_array[0][1] = BoardSquare.new("b", 8, "black", "knight", "black")
-    @board_array[0][2] = BoardSquare.new("c", 8, "white", "bishop", "black")
-    @board_array[0][3] = BoardSquare.new("d", 8, "black", "queen", "black")
-    @board_array[0][4] = BoardSquare.new("e", 8, "white", "king", "black")
-    @board_array[0][5] = BoardSquare.new("f", 8, "black", "bishop", "black")
-    @board_array[0][6] = BoardSquare.new("g", 8, "white", "knight", "black")
-    @board_array[0][7] = BoardSquare.new("h", 8, "black", "rook", "black")
+    @board_array[0][0] = BoardSquare.new("a", 8, "white", :rook, "black")
+    @board_array[0][1] = BoardSquare.new("b", 8, "black", :knight, "black")
+    @board_array[0][2] = BoardSquare.new("c", 8, "white", :bishop, "black")
+    @board_array[0][3] = BoardSquare.new("d", 8, "black", :queen, "black")
+    @board_array[0][4] = BoardSquare.new("e", 8, "white", :king, "black")
+    @board_array[0][5] = BoardSquare.new("f", 8, "black", :bishop, "black")
+    @board_array[0][6] = BoardSquare.new("g", 8, "white", :knight, "black")
+    @board_array[0][7] = BoardSquare.new("h", 8, "black", :rook, "black")
 
-    @board_array[1][0] = BoardSquare.new("a", 7, "black", "pawn", "black")
-    @board_array[1][2] = BoardSquare.new("c", 7, "black", "pawn", "black")
-    @board_array[1][3] = BoardSquare.new("d", 7, "white", "pawn", "black")
-    @board_array[1][4] = BoardSquare.new("e", 7, "black", "pawn", "black")
-    @board_array[1][5] = BoardSquare.new("f", 7, "white", "pawn", "black")
-    @board_array[1][6] = BoardSquare.new("g", 7, "black", "pawn", "black")
-    @board_array[1][7] = BoardSquare.new("h", 7, "white", "pawn", "black")
+    @board_array[1][0] = BoardSquare.new("a", 7, "black", :pawn, "black")
+    @board_array[1][1] = BoardSquare.new("a", 7, "white", :pawn, "black")
+    @board_array[1][2] = BoardSquare.new("c", 7, "black", :pawn, "black")
+    @board_array[1][3] = BoardSquare.new("d", 7, "white", :pawn, "black")
+    @board_array[1][4] = BoardSquare.new("e", 7, "black", :pawn, "black")
+    @board_array[1][5] = BoardSquare.new("f", 7, "white", :pawn, "black")
+    @board_array[1][6] = BoardSquare.new("g", 7, "black", :pawn, "black")
+    @board_array[1][7] = BoardSquare.new("h", 7, "white", :pawn, "black")
 
     @board_array[2][0] = BoardSquare.new("a", 6, "white")
     @board_array[2][1] = BoardSquare.new("b", 6, "black")
@@ -269,23 +251,23 @@ class Board
     @board_array[5][6] = BoardSquare.new("g", 3, "black")
     @board_array[5][7] = BoardSquare.new("h", 3, "white")
 
-    @board_array[6][0] = BoardSquare.new("a", 2, "white", "pawn", "white")
-    @board_array[6][1] = BoardSquare.new("b", 2, "black", "pawn", "white")
-    @board_array[6][2] = BoardSquare.new("c", 2, "white", "pawn", "white")
-    @board_array[6][3] = BoardSquare.new("d", 2, "black", "pawn", "white")
-    @board_array[6][4] = BoardSquare.new("e", 2, "white", "pawn", "white")
-    @board_array[6][5] = BoardSquare.new("f", 2, "black", "pawn", "white")
-    @board_array[6][6] = BoardSquare.new("g", 2, "white", "pawn", "white")
-    @board_array[6][7] = BoardSquare.new("h", 2, "black", "pawn", "white")
+    @board_array[6][0] = BoardSquare.new("a", 2, "white", :pawn, "white")
+    @board_array[6][1] = BoardSquare.new("b", 2, "black", :pawn, "white")
+    @board_array[6][2] = BoardSquare.new("c", 2, "white", :pawn, "white")
+    @board_array[6][3] = BoardSquare.new("d", 2, "black", :pawn, "white")
+    @board_array[6][4] = BoardSquare.new("e", 2, "white", :pawn, "white")
+    @board_array[6][5] = BoardSquare.new("f", 2, "black", :pawn, "white")
+    @board_array[6][6] = BoardSquare.new("g", 2, "white", :pawn, "white")
+    @board_array[6][7] = BoardSquare.new("h", 2, "black", :pawn, "white")
 
-    @board_array[7][0] = BoardSquare.new("a", 1, "black", "rook", "white")
-    @board_array[7][1] = BoardSquare.new("b", 1, "white", "knight", "white")
-    @board_array[7][2] = BoardSquare.new("c", 1, "black", "bishop", "white")
-    @board_array[7][3] = BoardSquare.new("d", 1, "white", "queen", "white")
-    @board_array[7][4] = BoardSquare.new("e", 1, "black", "king", "white")
-    @board_array[7][5] = BoardSquare.new("f", 1, "white", "bishop", "white")
-    @board_array[7][6] = BoardSquare.new("g", 1, "black", "knight", "white")
-    @board_array[7][7] = BoardSquare.new("h", 1, "white", "rook", "white")
+    @board_array[7][0] = BoardSquare.new("a", 1, "black", :rook, "white")
+    @board_array[7][1] = BoardSquare.new("b", 1, "white", :knight, "white")
+    @board_array[7][2] = BoardSquare.new("c", 1, "black", :bishop, "white")
+    @board_array[7][3] = BoardSquare.new("d", 1, "white", :queen, "white")
+    @board_array[7][4] = BoardSquare.new("e", 1, "black", :king, "white")
+    @board_array[7][5] = BoardSquare.new("f", 1, "white", :bishop, "white")
+    @board_array[7][6] = BoardSquare.new("g", 1, "black", :knight, "white")
+    @board_array[7][7] = BoardSquare.new("h", 1, "white", :rook, "white")
   end
 
   def get_square_from_notation(l_notation, n_notation)
@@ -365,6 +347,7 @@ board = Board.new()
 display = Display.new(board)
 
 display.contents
+
 
 
 
