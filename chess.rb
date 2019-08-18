@@ -6,13 +6,18 @@ module ChessConstants
   N_ARRAY = [1, 2, 3, 4, 5, 6, 7, 8]
 end
 
-class GameControl
+class GameController
   attr_accessor :board, :display, :current_player
   
-  def initialize(board)
+  def initialize
     @board = Board.new
     @display = Display.new(@board)
     @current_player = nil
+  end
+
+  def get_move
+    @current_player = Player.new(@board) if @current_player == nil
+    @current_player.get_move
   end
 end
 
@@ -277,6 +282,7 @@ class Board
         return board_square if board_square.piece == piece
       end
     end
+    return nil
   end
 
   def get_square_from_notation(l_notation, n_notation)
@@ -289,6 +295,7 @@ class Board
           end
       end
     end
+    return nil
   end
 
   def square_notation_exists?(l_notation, n_notation)
@@ -308,6 +315,7 @@ class Board
           end
       end
     end
+    return nil
   end
 
   def square_index_exists?(l_n_index, n_n_index)
@@ -412,18 +420,44 @@ end
 
 
 class Player
+  attr_accessor :board
+
+  def initialize(board)
+    @board = board
+  end
+
+  def get_move
+    puts("Please input piece to move letter.")
+    letter = gets.chomp
+    puts("Please input piece to move number.")
+    number = gets.chomp
+    prior_square = @board.get_square_from_notation(letter, number.to_i)
+
+    puts("Please input new letter.")
+    new_letter = gets.chomp
+    puts("please input new number.")
+    new_number = gets.chomp
+    
+    new_square = @board.get_square_from_notation(new_letter, new_number.to_i)
+    new_square.piece = prior_square.piece
+    prior_square.piece = nil
+  end
 end
 
 class Computer
 end
 
-board = Board.new()
+game_controller = GameController.new()
 
-display = Display.new(board)
+game_controller.display.contents
 
-display.contents
+game_controller.get_move
 
+game_controller.display.contents
 
+game_controller.get_move
+
+game_controller.display.contents
 
 
 
