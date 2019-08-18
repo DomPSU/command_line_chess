@@ -335,6 +335,12 @@ class Piece
     @color = color
     @board = board
   end
+
+  def valid_move?(new_l_n_index, new_n_n_index)
+    if @board.square_index_exists?(new_l_n_index, new_n_n_index)
+      return @board.get_square_from_index(new_l_n_index, new_n_n_index)
+    end
+  end
 end
 
 class Knight < Piece
@@ -369,25 +375,19 @@ class Knight < Piece
     parent_l_n_index = L_ARRAY.index(parent.l_notation)
     parent_n_n_index = N_ARRAY.index(parent.n_notation)
 
-    child_array << nil_unless_exists(parent_l_n_index + 1, parent_n_n_index + 2)
-    child_array << nil_unless_exists(parent_l_n_index + 2, parent_n_n_index + 1)
+    child_array << valid_move?(parent_l_n_index + 1, parent_n_n_index + 2)
+    child_array << valid_move?(parent_l_n_index + 2, parent_n_n_index + 1)
 
-    child_array << nil_unless_exists(parent_l_n_index + 2, parent_n_n_index - 1)
-    child_array << nil_unless_exists(parent_l_n_index + 1, parent_n_n_index - 2)
+    child_array << valid_move?(parent_l_n_index + 2, parent_n_n_index - 1)
+    child_array << valid_move?(parent_l_n_index + 1, parent_n_n_index - 2)
 
-    child_array << nil_unless_exists(parent_l_n_index - 1, parent_n_n_index - 2)
-    child_array << nil_unless_exists(parent_l_n_index - 2, parent_n_n_index - 1)
+    child_array << valid_move?(parent_l_n_index - 1, parent_n_n_index - 2)
+    child_array << valid_move?(parent_l_n_index - 2, parent_n_n_index - 1)
 
-    child_array << nil_unless_exists(parent_l_n_index - 2, parent_n_n_index + 1) 
-    child_array << nil_unless_exists(parent_l_n_index - 1, parent_n_n_index + 2)
+    child_array << valid_move?(parent_l_n_index - 2, parent_n_n_index + 1) 
+    child_array << valid_move?(parent_l_n_index - 1, parent_n_n_index + 2)
 
     return child_array.compact
-  end
-
-  def nil_unless_exists(new_l_n_index, new_n_n_index)
-    if @board.square_index_exists?(new_l_n_index, new_n_n_index)
-      return @board.get_square_from_index(new_l_n_index, new_n_n_index)
-    end
   end
 end
 
@@ -421,7 +421,7 @@ board = Board.new()
 
 display = Display.new(board)
 
-puts(board.get_square_from_notation("b", 1).piece.get_child_array)
+display.contents
 
 
 
