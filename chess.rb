@@ -30,20 +30,19 @@ class Node
 end
 
 class BoardSquare
-  attr_accessor :l_notation, :n_notation, :color, :piece, :piece_color
+  attr_accessor :l_notation, :n_notation, :color, :piece
 
   def initialize(l_notation, n_notation, color)
     @l_notation = l_notation
     @n_notation = n_notation
     @color = color
     @piece = nil
-    @piece_color = nil
   end
 
   def info #TODO test function to eventually delete
-    print "#{@l_notation} #{@n_notation} #{@color} #{@piece} #{@piece_color}"
+    print "#{@l_notation} #{@n_notation} #{@color} #{@piece}"
     print " nil " if @piece.nil?
-    print " nil " if @piece_color.nil?
+
     puts("")
   end
 end
@@ -104,7 +103,7 @@ class Display
       if board_square.piece.nil?
         print " "
       else
-        print unicode_piece(board_square.piece, board_square.piece_color)
+        print unicode_piece(board_square.piece, board_square.piece.color)
       end
       print " "
     end
@@ -168,7 +167,9 @@ class Display
     return hash.fetch(key).encode('utf-8')   
   end
 
-  def unicode_piece(key, piece_color)
+  def unicode_piece(piece, piece_color)
+   key = piece.class.to_s.downcase.to_sym
+
     white_hash = {king: "\u2654",
                   queen: "\u2655",
                   rook: "\u2656",
@@ -355,62 +356,30 @@ class Board
 end
 
 class Piece
-  attr_accessor :board, :board_square
+  attr_accessor :board, :board_square, :color
 
-  def initialize(l_notation, n_notation, piece_color, board)
+  def initialize(l_notation, n_notation, color, board)
     @board = board
     @board_square = @board.get_square_from_notation(l_notation, n_notation)
-    @board_square.piece = self.class.to_s.downcase.to_sym
-    @board_square.piece_color = piece_color
+    @board_square.piece = self
+    @color = color
   end
 end
 
 class Knight < Piece
-  def build_move_tree(start_square, final_square)
+  def build_move_tree(start_square, depth)
     root = Node.new(nil, start_square.l_notation, start_square.n_notation)
     
     queue = [root]
     current_node = queue[0]
 
-    while node_equal_to_square?(current_node, final_square) == false
+    while depth > 0
       add_children_to_queue(current_node, queue)
       queue.shift
       current_node = queue[0]
+      depth -= 1
     end
     return current_node
-  end
-
-  def node_equal_to_square?(node, square)
-    return true if ((node.l_notation == square.l_notation) && 
-                   (node.n_notation == square.n_notation))
-
-    return false
-  end
-
-  def get_all_moves(node)
-    move_array = [node]
-    
-    while move_array[-1].parent != nil
-      move_array << move_array[-1].parent
-    end
-    return move_array.reverse
-  end
-
-  def move(start_square_array, end_square_array)
-    s_s_l_n = start_square_array[0]
-    s_s_n_n = start_square_array[1]
-
-    e_s_l_n = end_square_array[0]
-    e_s_n_n = end_square_array[1]
-
-    start_square = @board.get_square_from_notation(s_s_l_n, s_s_n_n)
-    end_square = @board.get_square_from_notation(e_s_l_n, e_s_n_n)
-
-    move_array = get_all_moves(build_move_tree(start_square, end_square))
-    
-    puts("You made it in #{move_array.size} moves! Here is your path:")
-    
-    move_array.each{|square| puts("#{square.l_notation} #{square.n_notation}")}
   end
 
   def add_children_to_queue(parent, queue)
@@ -479,7 +448,6 @@ display = Display.new(board)
 
 display.contents
 
-pawn = Pawn.new("c", 1, "white", board)
 
 
 
