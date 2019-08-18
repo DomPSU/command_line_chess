@@ -197,23 +197,23 @@ class Board
   def initialize
     @board_array = Array.new(8) {Array.new(8)}
 
-    @board_array[0][0] = BoardSquare.new("a", 8, "white", :rook, "black")
-    @board_array[0][1] = BoardSquare.new("b", 8, "black", :knight, "black")
-    @board_array[0][2] = BoardSquare.new("c", 8, "white", :bishop, "black")
-    @board_array[0][3] = BoardSquare.new("d", 8, "black", :queen, "black")
-    @board_array[0][4] = BoardSquare.new("e", 8, "white", :king, "black")
-    @board_array[0][5] = BoardSquare.new("f", 8, "black", :bishop, "black")
-    @board_array[0][6] = BoardSquare.new("g", 8, "white", :knight, "black")
-    @board_array[0][7] = BoardSquare.new("h", 8, "black", :rook, "black")
+    @board_array[0][0] = BoardSquare.new("a", 8, "white")
+    @board_array[0][1] = BoardSquare.new("b", 8, "black")
+    @board_array[0][2] = BoardSquare.new("c", 8, "white")
+    @board_array[0][3] = BoardSquare.new("d", 8, "black")
+    @board_array[0][4] = BoardSquare.new("e", 8, "white")
+    @board_array[0][5] = BoardSquare.new("f", 8, "black")
+    @board_array[0][6] = BoardSquare.new("g", 8, "white")
+    @board_array[0][7] = BoardSquare.new("h", 8, "black")
 
-    @board_array[1][0] = BoardSquare.new("a", 7, "black", :pawn, "black")
-    @board_array[1][1] = BoardSquare.new("a", 7, "white", :pawn, "black")
-    @board_array[1][2] = BoardSquare.new("c", 7, "black", :pawn, "black")
-    @board_array[1][3] = BoardSquare.new("d", 7, "white", :pawn, "black")
-    @board_array[1][4] = BoardSquare.new("e", 7, "black", :pawn, "black")
-    @board_array[1][5] = BoardSquare.new("f", 7, "white", :pawn, "black")
-    @board_array[1][6] = BoardSquare.new("g", 7, "black", :pawn, "black")
-    @board_array[1][7] = BoardSquare.new("h", 7, "white", :pawn, "black")
+    @board_array[1][0] = BoardSquare.new("a", 7, "black")
+    @board_array[1][1] = BoardSquare.new("b", 7, "white")
+    @board_array[1][2] = BoardSquare.new("c", 7, "black")
+    @board_array[1][3] = BoardSquare.new("d", 7, "white")
+    @board_array[1][4] = BoardSquare.new("e", 7, "black")
+    @board_array[1][5] = BoardSquare.new("f", 7, "white")
+    @board_array[1][6] = BoardSquare.new("g", 7, "black")
+    @board_array[1][7] = BoardSquare.new("h", 7, "white")
 
     @board_array[2][0] = BoardSquare.new("a", 6, "white")
     @board_array[2][1] = BoardSquare.new("b", 6, "black")
@@ -251,23 +251,60 @@ class Board
     @board_array[5][6] = BoardSquare.new("g", 3, "black")
     @board_array[5][7] = BoardSquare.new("h", 3, "white")
 
-    @board_array[6][0] = BoardSquare.new("a", 2, "white", :pawn, "white")
-    @board_array[6][1] = BoardSquare.new("b", 2, "black", :pawn, "white")
-    @board_array[6][2] = BoardSquare.new("c", 2, "white", :pawn, "white")
-    @board_array[6][3] = BoardSquare.new("d", 2, "black", :pawn, "white")
-    @board_array[6][4] = BoardSquare.new("e", 2, "white", :pawn, "white")
-    @board_array[6][5] = BoardSquare.new("f", 2, "black", :pawn, "white")
-    @board_array[6][6] = BoardSquare.new("g", 2, "white", :pawn, "white")
-    @board_array[6][7] = BoardSquare.new("h", 2, "black", :pawn, "white")
+    @board_array[6][0] = BoardSquare.new("a", 2, "white")
+    @board_array[6][1] = BoardSquare.new("b", 2, "black")
+    @board_array[6][2] = BoardSquare.new("c", 2, "white")
+    @board_array[6][3] = BoardSquare.new("d", 2, "black")
+    @board_array[6][4] = BoardSquare.new("e", 2, "white")
+    @board_array[6][5] = BoardSquare.new("f", 2, "black")
+    @board_array[6][6] = BoardSquare.new("g", 2, "white")
+    @board_array[6][7] = BoardSquare.new("h", 2, "black")
 
-    @board_array[7][0] = BoardSquare.new("a", 1, "black", :rook, "white")
-    @board_array[7][1] = BoardSquare.new("b", 1, "white", :knight, "white")
-    @board_array[7][2] = BoardSquare.new("c", 1, "black", :bishop, "white")
-    @board_array[7][3] = BoardSquare.new("d", 1, "white", :queen, "white")
-    @board_array[7][4] = BoardSquare.new("e", 1, "black", :king, "white")
-    @board_array[7][5] = BoardSquare.new("f", 1, "white", :bishop, "white")
-    @board_array[7][6] = BoardSquare.new("g", 1, "black", :knight, "white")
-    @board_array[7][7] = BoardSquare.new("h", 1, "white", :rook, "white")
+    @board_array[7][0] = BoardSquare.new("a", 1, "black")
+    @board_array[7][1] = BoardSquare.new("b", 1, "white")
+    @board_array[7][2] = BoardSquare.new("c", 1, "black")
+    @board_array[7][3] = BoardSquare.new("d", 1, "white")
+    @board_array[7][4] = BoardSquare.new("e", 1, "black")
+    @board_array[7][5] = BoardSquare.new("f", 1, "white")
+    @board_array[7][6] = BoardSquare.new("g", 1, "black")
+    @board_array[7][7] = BoardSquare.new("h", 1, "white")
+
+    Rook.new("a", 8, "black", self)
+    Knight.new("b", 8, "black", self)
+    Bishop.new("c", 8, "black", self)
+    Queen.new("d", 8, "black", self)
+    King.new("e", 8, "black", self)
+    Bishop.new("f", 8, "black", self)
+    Knight.new("g", 8, "black", self)
+    Rook.new("h", 8, "black", self)
+
+    Pawn.new("a", 7, "black", self)
+    Pawn.new("b", 7, "black", self)
+    Pawn.new("c", 7, "black", self)
+    Pawn.new("d", 7, "black", self)
+    Pawn.new("e", 7, "black", self)
+    Pawn.new("f", 7, "black", self)
+    Pawn.new("g", 7, "black", self)
+    Pawn.new("h", 7, "black", self)
+
+    Pawn.new("a", 2, "white", self)
+    Pawn.new("b", 2, "white", self)
+    Pawn.new("c", 2, "white", self)
+    Pawn.new("d", 2, "white", self)
+    Pawn.new("e", 2, "white", self)
+    Pawn.new("f", 2, "white", self)
+    Pawn.new("g", 2, "white", self)
+    Pawn.new("h", 2, "white", self)
+
+    Rook.new("a", 1, "white", self)
+    Knight.new("b", 1, "white", self)
+    Bishop.new("c", 1, "white", self)
+    Queen.new("d", 1, "white", self)
+    King.new("e", 1, "white", self)
+    Bishop.new("f", 1, "white", self)
+    Knight.new("g", 1, "white", self)
+    Rook.new("h", 1, "white", self)
+
   end
 
   def get_square_from_notation(l_notation, n_notation)
@@ -323,7 +360,7 @@ class Knight
   def initialize(l_notation, n_notation, piece_color, board)
     @board = board
     @board_square = @board.get_square_from_notation(l_notation, n_notation)
-    @board_square.piece = "knight"
+    @board_square.piece = :knight
     @board_square.piece_color = piece_color
   end
 
@@ -409,26 +446,65 @@ class Knight
   end
 end
 
+class Rook
+  attr_accessor :board, :board_square
+
+  def initialize(l_notation, n_notation, piece_color, board)
+    @board = board
+    @board_square = @board.get_square_from_notation(l_notation, n_notation)
+    @board_square.piece = :rook
+    @board_square.piece_color = piece_color
+  end
+end
+
+class Bishop
+  attr_accessor :board, :board_square
+
+  def initialize(l_notation, n_notation, piece_color, board)
+    @board = board
+    @board_square = @board.get_square_from_notation(l_notation, n_notation)
+    @board_square.piece = :bishop
+    @board_square.piece_color = piece_color
+  end
+end
+
+class Queen
+  attr_accessor :board, :board_square
+
+  def initialize(l_notation, n_notation, piece_color, board)
+    @board = board
+    @board_square = @board.get_square_from_notation(l_notation, n_notation)
+    @board_square.piece = :queen
+    @board_square.piece_color = piece_color
+  end
+end
+
+class King
+  attr_accessor :board, :board_square
+
+  def initialize(l_notation, n_notation, piece_color, board)
+    @board = board
+    @board_square = @board.get_square_from_notation(l_notation, n_notation)
+    @board_square.piece = :king
+    @board_square.piece_color = piece_color
+  end
+end
+
+class Pawn
+  attr_accessor :board, :board_square
+
+  def initialize(l_notation, n_notation, piece_color, board)
+    @board = board
+    @board_square = @board.get_square_from_notation(l_notation, n_notation)
+    @board_square.piece = :pawn
+    @board_square.piece_color = piece_color
+  end
+end
 
 class Player
 end
 
 class Computer
-end
-
-class Rook
-end
-
-class Bishop
-end
-
-class Queen
-end
-
-class King
-end
-
-class Pawn
 end
 
 board = Board.new()
