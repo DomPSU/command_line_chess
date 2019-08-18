@@ -32,12 +32,12 @@ end
 class BoardSquare
   attr_accessor :l_notation, :n_notation, :color, :piece, :piece_color
 
-  def initialize(l_notation, n_notation, color, piece = nil, piece_color = nil)
+  def initialize(l_notation, n_notation, color)
     @l_notation = l_notation
     @n_notation = n_notation
     @color = color
-    @piece = piece
-    @piece_color = piece_color
+    @piece = nil
+    @piece_color = nil
   end
 
   def info #TODO test function to eventually delete
