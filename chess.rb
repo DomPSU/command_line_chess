@@ -354,17 +354,18 @@ class Board
   end
 end
 
-class Knight
+class Piece
   attr_accessor :board, :board_square
 
   def initialize(l_notation, n_notation, piece_color, board)
     @board = board
     @board_square = @board.get_square_from_notation(l_notation, n_notation)
-    @board_square.piece = :knight
+    @board_square.piece = self.class.to_s.downcase.to_sym
     @board_square.piece_color = piece_color
   end
+end
 
-
+class Knight < Piece
   def build_move_tree(start_square, final_square)
     root = Node.new(nil, start_square.l_notation, start_square.n_notation)
     
@@ -446,60 +447,25 @@ class Knight
   end
 end
 
-class Rook
-  attr_accessor :board, :board_square
+class Rook < Piece
 
-  def initialize(l_notation, n_notation, piece_color, board)
-    @board = board
-    @board_square = @board.get_square_from_notation(l_notation, n_notation)
-    @board_square.piece = :rook
-    @board_square.piece_color = piece_color
-  end
 end
 
-class Bishop
-  attr_accessor :board, :board_square
+class Bishop < Piece
 
-  def initialize(l_notation, n_notation, piece_color, board)
-    @board = board
-    @board_square = @board.get_square_from_notation(l_notation, n_notation)
-    @board_square.piece = :bishop
-    @board_square.piece_color = piece_color
-  end
 end
 
-class Queen
-  attr_accessor :board, :board_square
+class Queen < Piece
 
-  def initialize(l_notation, n_notation, piece_color, board)
-    @board = board
-    @board_square = @board.get_square_from_notation(l_notation, n_notation)
-    @board_square.piece = :queen
-    @board_square.piece_color = piece_color
-  end
 end
 
-class King
-  attr_accessor :board, :board_square
-
-  def initialize(l_notation, n_notation, piece_color, board)
-    @board = board
-    @board_square = @board.get_square_from_notation(l_notation, n_notation)
-    @board_square.piece = :king
-    @board_square.piece_color = piece_color
-  end
+class King < Piece
 end
 
-class Pawn
-  attr_accessor :board, :board_square
-
-  def initialize(l_notation, n_notation, piece_color, board)
-    @board = board
-    @board_square = @board.get_square_from_notation(l_notation, n_notation)
-    @board_square.piece = :pawn
-    @board_square.piece_color = piece_color
-  end
+class Pawn < Piece
 end
+
+
 
 class Player
 end
@@ -512,6 +478,10 @@ board = Board.new()
 display = Display.new(board)
 
 display.contents
+
+pawn = Pawn.new("c", 1, "white", board)
+
+
 
 
 
