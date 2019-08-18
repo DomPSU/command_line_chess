@@ -32,11 +32,11 @@ end
 class BoardSquare
   attr_accessor :l_notation, :n_notation, :color, :piece
 
-  def initialize(l_notation, n_notation, color)
+  def initialize(l_notation, n_notation, color, piece = nil)
     @l_notation = l_notation
     @n_notation = n_notation
     @color = color
-    @piece = nil
+    @piece = piece
   end
 
   def info #TODO test function to eventually delete
@@ -97,7 +97,7 @@ class Display
     print(n_notation)
     print " "
 
-    @board.board_array[NUMBER_OF_ROWS-n_notation].each do |board_square|
+    @board.array[NUMBER_OF_ROWS-n_notation].each do |board_square|
       print unicode_board(:vertical)
 
       if board_square.piece.nil?
@@ -193,123 +193,94 @@ end
 class Board
   include ChessConstants
 
-  attr_accessor :board_array
+  attr_accessor :array
 
   def initialize
-    @board_array = Array.new(8) {Array.new(8)}
+    @array = Array.new(8) {Array.new(8)}
 
-    @board_array[0][0] = BoardSquare.new("a", 8, "white")
-    @board_array[0][1] = BoardSquare.new("b", 8, "black")
-    @board_array[0][2] = BoardSquare.new("c", 8, "white")
-    @board_array[0][3] = BoardSquare.new("d", 8, "black")
-    @board_array[0][4] = BoardSquare.new("e", 8, "white")
-    @board_array[0][5] = BoardSquare.new("f", 8, "black")
-    @board_array[0][6] = BoardSquare.new("g", 8, "white")
-    @board_array[0][7] = BoardSquare.new("h", 8, "black")
+    @array[0][0] = BoardSquare.new("a", 8, "white", Rook.new("black", self))
+    @array[0][1] = BoardSquare.new("b", 8, "black", Knight.new("black", self))
+    @array[0][2] = BoardSquare.new("c", 8, "white", Bishop.new("black", self))
+    @array[0][3] = BoardSquare.new("d", 8, "black", Queen.new("black", self))
+    @array[0][4] = BoardSquare.new("e", 8, "white", King.new("black", self))
+    @array[0][5] = BoardSquare.new("f", 8, "black", Bishop.new("black", self))
+    @array[0][6] = BoardSquare.new("g", 8, "white", Knight.new("black", self))
+    @array[0][7] = BoardSquare.new("h", 8, "black", Rook.new("black", self))
 
-    @board_array[1][0] = BoardSquare.new("a", 7, "black")
-    @board_array[1][1] = BoardSquare.new("b", 7, "white")
-    @board_array[1][2] = BoardSquare.new("c", 7, "black")
-    @board_array[1][3] = BoardSquare.new("d", 7, "white")
-    @board_array[1][4] = BoardSquare.new("e", 7, "black")
-    @board_array[1][5] = BoardSquare.new("f", 7, "white")
-    @board_array[1][6] = BoardSquare.new("g", 7, "black")
-    @board_array[1][7] = BoardSquare.new("h", 7, "white")
+    @array[1][0] = BoardSquare.new("a", 7, "black", Pawn.new("black", self))
+    @array[1][1] = BoardSquare.new("b", 7, "white", Pawn.new("black", self))
+    @array[1][2] = BoardSquare.new("c", 7, "black", Pawn.new("black", self))
+    @array[1][3] = BoardSquare.new("d", 7, "white", Pawn.new("black", self))
+    @array[1][4] = BoardSquare.new("e", 7, "black", Pawn.new("black", self))
+    @array[1][5] = BoardSquare.new("f", 7, "white", Pawn.new("black", self))
+    @array[1][6] = BoardSquare.new("g", 7, "black", Pawn.new("black", self))
+    @array[1][7] = BoardSquare.new("h", 7, "white", Pawn.new("black", self))
 
-    @board_array[2][0] = BoardSquare.new("a", 6, "white")
-    @board_array[2][1] = BoardSquare.new("b", 6, "black")
-    @board_array[2][2] = BoardSquare.new("c", 6, "white")
-    @board_array[2][3] = BoardSquare.new("d", 6, "black")
-    @board_array[2][4] = BoardSquare.new("e", 6, "white")
-    @board_array[2][5] = BoardSquare.new("f", 6, "black")
-    @board_array[2][6] = BoardSquare.new("g", 6, "white")
-    @board_array[2][7] = BoardSquare.new("h", 6, "black")
+    @array[2][0] = BoardSquare.new("a", 6, "white")
+    @array[2][1] = BoardSquare.new("b", 6, "black")
+    @array[2][2] = BoardSquare.new("c", 6, "white")
+    @array[2][3] = BoardSquare.new("d", 6, "black")
+    @array[2][4] = BoardSquare.new("e", 6, "white")
+    @array[2][5] = BoardSquare.new("f", 6, "black")
+    @array[2][6] = BoardSquare.new("g", 6, "white")
+    @array[2][7] = BoardSquare.new("h", 6, "black")
 
-    @board_array[3][0] = BoardSquare.new("a", 5, "black")
-    @board_array[3][1] = BoardSquare.new("b", 5, "white")
-    @board_array[3][2] = BoardSquare.new("c", 5, "black")
-    @board_array[3][3] = BoardSquare.new("d", 5, "white")
-    @board_array[3][4] = BoardSquare.new("e", 5, "black")
-    @board_array[3][5] = BoardSquare.new("f", 5, "white")
-    @board_array[3][6] = BoardSquare.new("g", 5, "black")
-    @board_array[3][7] = BoardSquare.new("h", 5, "white")
+    @array[3][0] = BoardSquare.new("a", 5, "black")
+    @array[3][1] = BoardSquare.new("b", 5, "white")
+    @array[3][2] = BoardSquare.new("c", 5, "black")
+    @array[3][3] = BoardSquare.new("d", 5, "white")
+    @array[3][4] = BoardSquare.new("e", 5, "black")
+    @array[3][5] = BoardSquare.new("f", 5, "white")
+    @array[3][6] = BoardSquare.new("g", 5, "black")
+    @array[3][7] = BoardSquare.new("h", 5, "white")
 
-    @board_array[4][0] = BoardSquare.new("a", 4, "white")
-    @board_array[4][1] = BoardSquare.new("b", 4, "black")
-    @board_array[4][2] = BoardSquare.new("c", 4, "white")
-    @board_array[4][3] = BoardSquare.new("d", 4, "black")
-    @board_array[4][4] = BoardSquare.new("e", 4, "white")
-    @board_array[4][5] = BoardSquare.new("f", 4, "black")
-    @board_array[4][6] = BoardSquare.new("g", 4, "white")
-    @board_array[4][7] = BoardSquare.new("h", 4, "black")
+    @array[4][0] = BoardSquare.new("a", 4, "white")
+    @array[4][1] = BoardSquare.new("b", 4, "black")
+    @array[4][2] = BoardSquare.new("c", 4, "white")
+    @array[4][3] = BoardSquare.new("d", 4, "black")
+    @array[4][4] = BoardSquare.new("e", 4, "white")
+    @array[4][5] = BoardSquare.new("f", 4, "black")
+    @array[4][6] = BoardSquare.new("g", 4, "white")
+    @array[4][7] = BoardSquare.new("h", 4, "black")
 
-    @board_array[5][0] = BoardSquare.new("a", 3, "black")
-    @board_array[5][1] = BoardSquare.new("b", 3, "white")
-    @board_array[5][2] = BoardSquare.new("c", 3, "black")
-    @board_array[5][3] = BoardSquare.new("d", 3, "white")
-    @board_array[5][4] = BoardSquare.new("e", 3, "black")
-    @board_array[5][5] = BoardSquare.new("f", 3, "white")
-    @board_array[5][6] = BoardSquare.new("g", 3, "black")
-    @board_array[5][7] = BoardSquare.new("h", 3, "white")
+    @array[5][0] = BoardSquare.new("a", 3, "black")
+    @array[5][1] = BoardSquare.new("b", 3, "white")
+    @array[5][2] = BoardSquare.new("c", 3, "black")
+    @array[5][3] = BoardSquare.new("d", 3, "white")
+    @array[5][4] = BoardSquare.new("e", 3, "black")
+    @array[5][5] = BoardSquare.new("f", 3, "white")
+    @array[5][6] = BoardSquare.new("g", 3, "black")
+    @array[5][7] = BoardSquare.new("h", 3, "white")
 
-    @board_array[6][0] = BoardSquare.new("a", 2, "white")
-    @board_array[6][1] = BoardSquare.new("b", 2, "black")
-    @board_array[6][2] = BoardSquare.new("c", 2, "white")
-    @board_array[6][3] = BoardSquare.new("d", 2, "black")
-    @board_array[6][4] = BoardSquare.new("e", 2, "white")
-    @board_array[6][5] = BoardSquare.new("f", 2, "black")
-    @board_array[6][6] = BoardSquare.new("g", 2, "white")
-    @board_array[6][7] = BoardSquare.new("h", 2, "black")
+    @array[6][0] = BoardSquare.new("a", 2, "white", Pawn.new("white", self))
+    @array[6][1] = BoardSquare.new("b", 2, "black", Pawn.new("white", self))
+    @array[6][2] = BoardSquare.new("c", 2, "white", Pawn.new("white", self))
+    @array[6][3] = BoardSquare.new("d", 2, "black", Pawn.new("white", self))
+    @array[6][4] = BoardSquare.new("e", 2, "white", Pawn.new("white", self))
+    @array[6][5] = BoardSquare.new("f", 2, "black", Pawn.new("white", self))
+    @array[6][6] = BoardSquare.new("g", 2, "white", Pawn.new("white", self))
+    @array[6][7] = BoardSquare.new("h", 2, "black", Pawn.new("white", self))
 
-    @board_array[7][0] = BoardSquare.new("a", 1, "black")
-    @board_array[7][1] = BoardSquare.new("b", 1, "white")
-    @board_array[7][2] = BoardSquare.new("c", 1, "black")
-    @board_array[7][3] = BoardSquare.new("d", 1, "white")
-    @board_array[7][4] = BoardSquare.new("e", 1, "black")
-    @board_array[7][5] = BoardSquare.new("f", 1, "white")
-    @board_array[7][6] = BoardSquare.new("g", 1, "black")
-    @board_array[7][7] = BoardSquare.new("h", 1, "white")
+    @array[7][0] = BoardSquare.new("a", 1, "black", Rook.new("white", self))
+    @array[7][1] = BoardSquare.new("b", 1, "white", Knight.new("white", self))
+    @array[7][2] = BoardSquare.new("c", 1, "black", Bishop.new("white", self))
+    @array[7][3] = BoardSquare.new("d", 1, "white", Queen.new("white", self))
+    @array[7][4] = BoardSquare.new("e", 1, "black", King.new("white", self))
+    @array[7][5] = BoardSquare.new("f", 1, "white", Bishop.new("white", self))
+    @array[7][6] = BoardSquare.new("g", 1, "black", Knight.new("white", self))
+    @array[7][7] = BoardSquare.new("h", 1, "white", Rook.new("white", self))
+  end
 
-    Rook.new("a", 8, "black", self)
-    Knight.new("b", 8, "black", self)
-    Bishop.new("c", 8, "black", self)
-    Queen.new("d", 8, "black", self)
-    King.new("e", 8, "black", self)
-    Bishop.new("f", 8, "black", self)
-    Knight.new("g", 8, "black", self)
-    Rook.new("h", 8, "black", self)
-
-    Pawn.new("a", 7, "black", self)
-    Pawn.new("b", 7, "black", self)
-    Pawn.new("c", 7, "black", self)
-    Pawn.new("d", 7, "black", self)
-    Pawn.new("e", 7, "black", self)
-    Pawn.new("f", 7, "black", self)
-    Pawn.new("g", 7, "black", self)
-    Pawn.new("h", 7, "black", self)
-
-    Pawn.new("a", 2, "white", self)
-    Pawn.new("b", 2, "white", self)
-    Pawn.new("c", 2, "white", self)
-    Pawn.new("d", 2, "white", self)
-    Pawn.new("e", 2, "white", self)
-    Pawn.new("f", 2, "white", self)
-    Pawn.new("g", 2, "white", self)
-    Pawn.new("h", 2, "white", self)
-
-    Rook.new("a", 1, "white", self)
-    Knight.new("b", 1, "white", self)
-    Bishop.new("c", 1, "white", self)
-    Queen.new("d", 1, "white", self)
-    King.new("e", 1, "white", self)
-    Bishop.new("f", 1, "white", self)
-    Knight.new("g", 1, "white", self)
-    Rook.new("h", 1, "white", self)
-
+  def get_square_from_piece(piece)
+    @array.each do |sub_array|        
+      sub_array.each do |board_square|
+        return board_square if board_square.piece == piece
+      end
+    end
   end
 
   def get_square_from_notation(l_notation, n_notation)
-    @board_array.each do |sub_array|        
+    @array.each do |sub_array|        
       sub_array.each do |board_square|
            if ((board_square.l_notation == l_notation)\
              && (board_square.n_notation == n_notation))
@@ -328,7 +299,7 @@ class Board
   end
 
   def get_square_from_index(l_n_index, n_n_index)
-    @board_array.each do |sub_array|        
+    @array.each do |sub_array|        
       sub_array.each do |board_square|
            if ((L_ARRAY.index(board_square.l_notation) == l_n_index)\
              && (N_ARRAY.index(board_square.n_notation) == n_n_index))
@@ -356,13 +327,11 @@ class Board
 end
 
 class Piece
-  attr_accessor :board, :board_square, :color
+  attr_accessor :color, :board
 
-  def initialize(l_notation, n_notation, color, board)
-    @board = board
-    @board_square = @board.get_square_from_notation(l_notation, n_notation)
-    @board_square.piece = self
+  def initialize(color, board)
     @color = color
+    @board = board
   end
 end
 
@@ -389,7 +358,7 @@ class Knight < Piece
     end
   end
 
-  def get_child_array(parent = @board_square)
+  def get_child_array(parent = @board.get_square_from_piece(self))
     child_array = []
     parent_l_n_index = @board.l_array.index(parent.l_notation)
     parent_n_n_index = @board.n_array.index(parent.n_notation)
