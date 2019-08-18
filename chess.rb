@@ -327,6 +327,8 @@ class Board
 end
 
 class Piece
+  include ChessConstants
+
   attr_accessor :color, :board
 
   def initialize(color, board)
@@ -336,6 +338,7 @@ class Piece
 end
 
 class Knight < Piece
+=begin
   def build_move_tree(start_square, depth)
     root = Node.new(nil, start_square.l_notation, start_square.n_notation)
     
@@ -348,7 +351,7 @@ class Knight < Piece
       current_node = queue[0]
       depth -= 1
     end
-    return current_node
+    return nil
   end
 
   def add_children_to_queue(parent, queue)
@@ -357,11 +360,14 @@ class Knight < Piece
       queue << Node.new(parent, child.l_notation, child.n_notation)
     end
   end
+=end
 
-  def get_child_array(parent = @board.get_square_from_piece(self))
+  def get_child_array
+    parent = @board.get_square_from_piece(self)    
+
     child_array = []
-    parent_l_n_index = @board.l_array.index(parent.l_notation)
-    parent_n_n_index = @board.n_array.index(parent.n_notation)
+    parent_l_n_index = L_ARRAY.index(parent.l_notation)
+    parent_n_n_index = N_ARRAY.index(parent.n_notation)
 
     child_array << nil_unless_exists(parent_l_n_index + 1, parent_n_n_index + 2)
     child_array << nil_unless_exists(parent_l_n_index + 2, parent_n_n_index + 1)
@@ -415,7 +421,7 @@ board = Board.new()
 
 display = Display.new(board)
 
-display.contents
+puts(board.get_square_from_notation("b", 1).piece.get_child_array)
 
 
 
