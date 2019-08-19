@@ -7,17 +7,49 @@ module ChessConstants
 end
 
 class GameController
-  attr_accessor :board, :display, :current_player
+  attr_accessor :board, :display, :white, :black, :players
   
   def initialize
     @board = Board.new
     @display = Display.new(@board)
-    @current_player = nil
+    @white = nil
+    @black = nil
+    @players = [Person.new(@board)]
   end
 
-  def get_move
-    @current_player = Player.new(@board) if @current_player == nil
-    @current_player.get_move
+  def play_match #TODO update
+    @players << set_opponet_type
+    set_colors
+    announce_colors
+  end
+
+  def set_opponet_type
+    loop do
+      puts "Enter P if you would like to play agaisnt another person."
+      puts "Enter C if you would like to play agaisnt a computer."
+
+      input = gets.chomp.gsub(/\s+/, "").upcase
+
+      return Person.new(@board) if input == "P"
+      
+      return Computer.new(@board) if input == "C"
+    end
+  end
+
+  def set_colors #TODO update
+    @white = @players.sample
+    
+    @black = @players[0] if @players[1] == @white
+    @black = @players[1] if @players[0] == @white
+  end
+
+  def announce_colors
+    puts "#{@white} is white."
+    puts "#{@black} is black."
+  end
+
+  def get_move #TODO update
+    #@white.get_move
   end
 end
 
@@ -419,7 +451,7 @@ end
 
 
 
-class Player
+class Person
   attr_accessor :board
 
   def initialize(board)
@@ -445,20 +477,16 @@ class Player
 end
 
 class Computer
+  attr_accessor :board
+
+  def initialize(board)
+    @board = board
+  end
 end
 
 game_controller = GameController.new()
 
-game_controller.display.contents
-
-game_controller.get_move
-
-game_controller.display.contents
-
-game_controller.get_move
-
-game_controller.display.contents
-
+game_controller.play_match
 
 
 
