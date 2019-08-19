@@ -491,17 +491,33 @@ class Player
     @piece_color = nil
   end
 
-  def valid_piece_to_move(l_notation, n_notation)
-    #square exists
-    #square has a piece
-    #piece color is same as player
+  def valid_piece_to_move?(l_notation, n_notation)
+    board_square = @board.get_square_from_notation(l_notation, n_notation)
+
+    if board_square.piece == nil
+      puts "Board square does not have piece"
+      return false
+    end
+
+    if board_square.piece.color != self.piece_color
+      puts "Board square does not have your piece color."
+      return false
+    end
+
     #movement will not cause check
     #has a valid square to move to (specifically king cannot move into check)
+
+    return true
   end
 
   def valid_square_to_place_piece?(l_notation, n_notation)
-    #square exists
-    #square does not contain piece with same color and player
+    board_square = @board.get_square_from_notation(l_notation, n_notation)
+  
+    if board_square.piece.color
+      puts "Board square already taken by your piece."
+      return false
+    end
+    return true
   end
 end
 
@@ -528,7 +544,7 @@ class Person < Player
       input = gets.chomp.gsub(/\s+/, "").downcase
       if ((input.length == 2)\
          && L_ARRAY.include?(input[0])\
-         && N_ARRAY.include?(input[1])) 
+         && N_ARRAY.include?(input[1]))
 
         return input
       end
