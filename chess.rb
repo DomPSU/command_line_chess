@@ -412,10 +412,11 @@ class Piece
     @never_moved = true
   end
 
-  def valid_move?(new_l_n_index, new_n_n_index)
+  def add_if_valid(child_array, new_l_n_index, new_n_n_index)
     if @board.square_index_exists?(new_l_n_index, new_n_n_index)
-      return @board.get_square_from_index(new_l_n_index, new_n_n_index)
+      child_array << @board.get_square_from_index(new_l_n_index, new_n_n_index)
     end
+    return nil
   end
 end
 
@@ -452,19 +453,19 @@ class Knight < Piece
     parent_l_n_index = L_ARRAY.index(parent.l_notation)
     parent_n_n_index = N_ARRAY.index(parent.n_notation)
 
-    child_array << valid_move?(parent_l_n_index + 1, parent_n_n_index + 2)
-    child_array << valid_move?(parent_l_n_index + 2, parent_n_n_index + 1)
+    add_if_valid(child_array, parent_l_n_index + 1, parent_n_n_index + 2)
+    add_if_valid(child_array, parent_l_n_index + 2, parent_n_n_index + 1)
 
-    child_array << valid_move?(parent_l_n_index + 2, parent_n_n_index - 1)
-    child_array << valid_move?(parent_l_n_index + 1, parent_n_n_index - 2)
+    add_if_valid(child_array, parent_l_n_index + 2, parent_n_n_index - 1)
+    add_if_valid(child_array, parent_l_n_index + 1, parent_n_n_index - 2)
 
-    child_array << valid_move?(parent_l_n_index - 1, parent_n_n_index - 2)
-    child_array << valid_move?(parent_l_n_index - 2, parent_n_n_index - 1)
+    add_if_valid(child_array, parent_l_n_index - 1, parent_n_n_index - 2)
+    add_if_valid(child_array, parent_l_n_index - 2, parent_n_n_index - 1)
 
-    child_array << valid_move?(parent_l_n_index - 2, parent_n_n_index + 1) 
-    child_array << valid_move?(parent_l_n_index - 1, parent_n_n_index + 2)
+    add_if_valid(child_array, parent_l_n_index - 2, parent_n_n_index + 1) 
+    add_if_valid(child_array, parent_l_n_index - 1, parent_n_n_index + 2)
 
-    return child_array.compact
+    return child_array
   end
 end
 
@@ -513,7 +514,7 @@ class Player
       return false
     end
 
-    #is within move tree. The other two comments might be taken care of by move tree.
+    #is within move tree (child_array if player). The other two comments might be taken care of by move tree.
     #movement will not cause check
     #has a valid square to move to (specifically king cannot move into check)
 
@@ -619,10 +620,15 @@ end
 class Computer < Player
 end
 
-game_controller = GameController.new()
+#game_controller = GameController.new()
 
-game_controller.play_match
+#game_controller.play_match
 
+board = Board.new
+
+squares = board.get_square_from_notation("b","1").piece.get_child_array
+
+squares.each {|x| x.info}
 
 
 
