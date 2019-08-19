@@ -517,7 +517,10 @@ class Person
     loop do
       puts "Please enter a board square with correct notation. (eg. e4)"
       input = gets.chomp.gsub(/\s+/, "").downcase
-      if ((input.length == 2) && L_ARRAY.include?(input[0]) && N_ARRAY.include?(input[1])) #TODO refactor
+      if ((input.length == 2)\
+         && L_ARRAY.include?(input[0])\
+         && N_ARRAY.include?(input[1])) 
+
         return input
       end
     end
