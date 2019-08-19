@@ -29,6 +29,7 @@ class GameController
       puts "Enter C if you would like to play agaisnt a computer."
 
       input = gets.chomp.gsub(/\s+/, "").upcase
+      puts("")
 
       return Person.new(@board) if input == "P"
       
@@ -44,8 +45,17 @@ class GameController
   end
 
   def announce_colors
-    puts "#{@white} is white."
-    puts "#{@black} is black."
+    if @players[1].class == Computer
+      puts "#{@white.class} will play as white."
+      puts "#{@black.class} will play as black."
+    elsif @white == @players[0]
+      puts "Player one will play as white."
+      puts "Player two will play as black."
+    elsif @black == @players[0]
+      puts "Player one will play as black."
+      puts "Player two will play as white."
+    end
+    puts("")
   end
 
   def get_move #TODO update
