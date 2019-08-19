@@ -465,7 +465,11 @@ class Knight < Piece
 end
 
 class Rook < Piece
-
+  attr_accessor :never_moved
+  
+  def initialize
+    @never_moved = true
+  end
 end
 
 class Bishop < Piece
@@ -477,9 +481,19 @@ class Queen < Piece
 end
 
 class King < Piece
+  attr_accessor :never_moved
+  
+  def initialize
+    @never_moved = true
+  end
 end
 
 class Pawn < Piece
+  attr_accessor :never_moved
+  
+  def initialize
+    @never_moved = true
+  end
 end
 
 class Player
@@ -491,7 +505,17 @@ class Player
     @piece_color = nil
   end
 
-  def current_player_piece? #TODO
+  def valid_piece_to_move?
+    #square exists
+    #square has a piece
+    #piece color is same as player
+    #movement will not cause check
+    #has a valid square to move to (specifically king cannot move into check)
+  end
+
+  def valid_square_to_place_piece?
+    #square exists
+    #square does not contain piece with same color and player
   end
 end
 
