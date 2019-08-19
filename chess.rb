@@ -14,7 +14,7 @@ class GameController
     @display = Display.new(@board)
     @white = nil
     @black = nil
-    @players = [Person.new(@board, "Player One")]
+    @players = [Person.new(@board, "Player one")]
     @current_player = nil
   end
 
@@ -33,9 +33,8 @@ class GameController
     end 
   end
 
-  def announce_current_player #TODO refactor output
-    puts "Computer turn." if @current_player.class == Computer
-    puts "#{@current_player.name} turn." if @current_player.class == Person
+  def announce_current_player
+    puts "It is #{@current_player.name}'s turn."
   end
 
   def switch_current_player #TODO refactor
@@ -62,9 +61,9 @@ class GameController
       input = gets.chomp.gsub(/\s+/, "").upcase
       puts("")
 
-      return Person.new(@board, "Player Two") if input == "P"
+      return Person.new(@board, "Player two") if input == "P"
       
-      return Computer.new(@board) if input == "C"
+      return Computer.new(@board, "Computer") if input == "C"
     end
   end
 
@@ -79,16 +78,8 @@ class GameController
   end
 
   def announce_colors
-    if @players[1].class == Computer
-      puts "#{@white.class} will play as white."
-      puts "#{@black.class} will play as black."
-    elsif @white == @players[0]
-      puts "Player one will play as white."
-      puts "Player two will play as black."
-    elsif @black == @players[0]
-      puts "Player one will play as black."
-      puts "Player two will play as white."
-    end
+    puts "#{@white.name} will play as white."
+    puts "#{@black.name} will play as black."
     puts("")
   end
 end
@@ -491,9 +482,20 @@ end
 class Pawn < Piece
 end
 
+class Player
+  attr_accessor :board, :name, :piece_color
 
+  def initialize(board, name = nil)
+    @board = board
+    @name = name
+    @piece_color = nil
+  end
 
-class Person << Player
+  def current_player_piece? #TODO
+  end
+end
+
+class Person < Player
   include ChessConstants
 
   def get_move
@@ -525,20 +527,8 @@ class Person << Player
 
 end
 
-class Player
-  attr_accessor :board, :name, :piece_color
-
-  def initialize(board, name = nil)
-    @board = board
-    @name = name
-    @piece_color = nil
-  end
-
-  def current_player_piece? #TODO
-  end
-end
-
-class Computer << Player
+class Computer < Player
+  
 end
 
 game_controller = GameController.new()
