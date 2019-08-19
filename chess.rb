@@ -493,16 +493,8 @@ end
 
 
 
-class Person
+class Person << Player
   include ChessConstants
-
-  attr_accessor :board, :name, :piece_color
-
-  def initialize(board, name)
-    @board = board
-    @name = name
-    @piece_color = nil
-  end
 
   def get_move
     puts "Please enter the board square of the piece you want to move."
@@ -531,22 +523,22 @@ class Person
     end
 	end
 
-  def current_player_piece?
-  end
-
 end
 
+class Player
+  attr_accessor :board, :name, :piece_color
 
-
-class Computer
-  attr_accessor :board
-
-  def initialize(board)
+  def initialize(board, name = nil)
     @board = board
+    @name = name
+    @piece_color = nil
   end
 
-  def get_move
+  def current_player_piece? #TODO
   end
+end
+
+class Computer << Player
 end
 
 game_controller = GameController.new()
