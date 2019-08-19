@@ -413,14 +413,14 @@ class Piece
     @never_moved = true
   end
 
-  def add_if_valid(child_array, new_l_n_index, new_n_n_index)
+  def add_if_valid(parent_color, child_array, new_l_n_index, new_n_n_index) #TODO refactor entire method
 
     return nil if square_index_exists?(new_l_n_index, new_n_n_index) == false
     board_square = @board.get_square_from_index(new_l_n_index, new_n_n_index)
 
     if board_square.piece == nil
-
-    elsif board_square.piece.color == "white"
+      
+    elsif board_square.piece.color == parent_color
       return nil
     end
 
@@ -462,17 +462,29 @@ class Knight < Piece
     parent_l_n_index = L_ARRAY.index(parent.l_notation)
     parent_n_n_index = N_ARRAY.index(parent.n_notation)
 
-    add_if_valid(child_array, parent_l_n_index + 1, parent_n_n_index + 2)
-    add_if_valid(child_array, parent_l_n_index + 2, parent_n_n_index + 1)
+    add_if_valid(self.color, child_array, parent_l_n_index + 1,
+                                          parent_n_n_index + 2)
 
-    add_if_valid(child_array, parent_l_n_index + 2, parent_n_n_index - 1)
-    add_if_valid(child_array, parent_l_n_index + 1, parent_n_n_index - 2)
+    add_if_valid(self.color, child_array, parent_l_n_index + 2,
+                                          parent_n_n_index + 1)
 
-    add_if_valid(child_array, parent_l_n_index - 1, parent_n_n_index - 2)
-    add_if_valid(child_array, parent_l_n_index - 2, parent_n_n_index - 1)
+    add_if_valid(self.color, child_array, parent_l_n_index + 2,
+                                          parent_n_n_index - 1)
 
-    add_if_valid(child_array, parent_l_n_index - 2, parent_n_n_index + 1) 
-    add_if_valid(child_array, parent_l_n_index - 1, parent_n_n_index + 2)
+    add_if_valid(self.color, child_array, parent_l_n_index + 1,
+                                          parent_n_n_index - 2)
+
+    add_if_valid(self.color, child_array, parent_l_n_index - 1,
+                                          parent_n_n_index - 2)
+
+    add_if_valid(self.color, child_array, parent_l_n_index - 2,
+                                          parent_n_n_index - 1)
+
+    add_if_valid(self.color, child_array, parent_l_n_index - 2,
+                                          parent_n_n_index + 1) 
+
+    add_if_valid(self.color, child_array, parent_l_n_index - 1,
+                                          parent_n_n_index + 2)
 
     return child_array
   end
