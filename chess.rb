@@ -500,14 +500,19 @@ class Player
 
     if board_square.piece == nil
       puts "Board square does not have piece"
+      puts ""
+
       return false
     end
 
     if board_square.piece.color != self.piece_color
       puts "Board square does not have your piece color."
+      puts ""
+
       return false
     end
 
+    #is within move tree. The other two comments might be taken care of by move tree.
     #movement will not cause check
     #has a valid square to move to (specifically king cannot move into check)
 
@@ -516,31 +521,39 @@ class Player
 
   def valid_square_to_place_piece?(l_notation, n_notation)
     board_square = @board.get_square_from_notation(l_notation, n_notation)
-  
-    if board_square.piece.color
+
+    if board_square.piece == nil
+      return true
+    elsif board_square.piece.color == @piece_color
       puts "Board square already taken by your piece."
+      puts ""
+
       return false
     end
     return true
   end
 
-  def valid_notation_input(input)
+  def valid_input?(input)
     if input.length != 2
       puts "Input not correct length. Please input one letter and one number."
+      puts ""
 
       return false
     elsif ((L_ARRAY.include?(input[0]) == false)\
           && (N_ARRAY.include?(input[1]) == false))
 
       puts "Please enter a letter, then a number. Both within range."
+      puts ""
 
       return false
     elsif L_ARRAY.include?(input[0]) == false
       puts "Please enter a letter within range."
+      puts ""
 
       return false
     elsif N_ARRAY.include?(input[1]) == false
       puts "Please enter a number within range."
+      puts ""
 
       return false
     end
@@ -551,29 +564,55 @@ end
 class Person < Player
   def get_move
     puts "Please enter the board square of the piece you want to move."
-    input = get_valid_input #TODO need to check if piece color is correct/move is valid    
+    puts ""
 
-    prior_square = @board.get_square_from_notation(input[0], input[1])
+    piece_to_move_notation = get_piece_to_move
+
+    l_notation = piece_to_move_notation[0]
+    n_notation = piece_to_move_notation[1]
+
+    prior_square = @board.get_square_from_notation(l_notation, n_notation)
 
     puts "Please enter the board square for where to move the piece."
-    input = get_valid_input #TODO need to check is move is valid 
+    puts ""
+
+    destination_board_square = get_where_to_move_piece
     
-    new_square = @board.get_square_from_notation(input[0], input[1])
+    l_notation = destination_board_square[0]
+    n_notation = destination_board_square[1]
+
+    new_square = @board.get_square_from_notation(l_notation, n_notation)
     new_square.piece = prior_square.piece
     prior_square.piece = nil
   end
   
-  def get_valid_input
+  def get_piece_to_move #TODO use yield to make one single function
     puts "Please use correct notation. (eg. e4)"
+    puts ""
+  
     loop do
       input = gets.chomp.gsub(/\s+/, "").downcase
-      if valid_notation_input(input) == true
+      if ((valid_input?(input) == true)\
+         && (valid_piece_to_move?(input[0], input[1]) == true))
 
         return input
       end
     end
 	end
 
+  def get_where_to_move_piece #TODO use yield to make one single function
+    puts "Please use correct notation. (eg. e4)"
+    puts ""
+
+    loop do
+      input = gets.chomp.gsub(/\s+/, "").downcase
+      if ((valid_input?(input) == true)\
+         && valid_square_to_place_piece?(input[0], input[1]) == true)
+
+        return input
+      end
+    end
+  end
 end
 
 class Computer < Player
