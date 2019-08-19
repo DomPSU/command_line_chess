@@ -4,6 +4,20 @@ module ChessConstants
   
   L_ARRAY = ["a", "b", "c", "d", "e", "f", "g", "h"]
   N_ARRAY = ["1", "2", "3", "4", "5", "6", "7", "8"]
+
+  def square_notation_exists?(l_notation, n_notation) 
+    return true if L_ARRAY.include?(l_notation) && 
+                   N_ARRAY.include?(n_notation)
+
+    return false
+  end
+
+  def square_index_exists?(l_n_index, n_n_index) 
+    return true if (l_n_index.between?(0, L_ARRAY.size - 1) &&
+                    n_n_index.between?(0, N_ARRAY.size - 1))
+
+    return false
+  end
 end
 
 class GameController
@@ -365,13 +379,6 @@ class Board
     return nil
   end
 
-  def square_notation_exists?(l_notation, n_notation) #TODO remove this because of chessconstants?
-    return true if @letter_array.include?(l_notation) && 
-                   @number_array.include?(n_notation)
-
-    return false
-  end
-
   def get_square_from_index(l_n_index, n_n_index)
     @array.each do |sub_array|        
       sub_array.each do |board_square|
@@ -383,12 +390,6 @@ class Board
       end
     end
     return nil
-  end
-
-  def square_index_exists?(l_n_index, n_n_index) #TODO remove this because of chessconstants?
-      return true if (l_n_index.between?(0, 7) && n_n_index.between?(0, 7))
-
-      return false
   end
 
   def display_info #TODO test function delete when finished
