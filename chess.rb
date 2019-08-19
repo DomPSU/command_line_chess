@@ -46,11 +46,11 @@ class GameController
     end
   end
 
-  def checkmate? #TODO
+  def checkmate? #TODO update
     return false
   end
 
-  def draw? #TODO
+  def draw? #TODO update
     return false
   end
 
@@ -365,7 +365,7 @@ class Board
     return nil
   end
 
-  def square_notation_exists?(l_notation, n_notation)
+  def square_notation_exists?(l_notation, n_notation) #TODO remove this because of chessconstants?
     return true if @letter_array.include?(l_notation) && 
                    @number_array.include?(n_notation)
 
@@ -385,7 +385,7 @@ class Board
     return nil
   end
 
-  def square_index_exists?(l_n_index, n_n_index)
+  def square_index_exists?(l_n_index, n_n_index) #TODO remove this because of chessconstants?
       return true if (l_n_index.between?(0, 7) && n_n_index.between?(0, 7))
 
       return false
