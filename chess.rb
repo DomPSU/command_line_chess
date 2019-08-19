@@ -24,6 +24,7 @@ class GameController
     announce_colors
 
     while ((checkmate? == false) && (draw? == false))
+      @display.contents
       announce_current_player
       @current_player.get_move
       switch_current_player #TODO refactor
@@ -139,6 +140,8 @@ class Display
 
     print_bottom_row
     print_l_notation
+
+    puts("")
   end
 
   def print_l_notation
@@ -169,7 +172,7 @@ class Display
     print(n_notation)
     print " "
 
-    @board.array[NUMBER_OF_ROWS-n_notation].each do |board_square|
+    @board.array[NUMBER_OF_ROWS - n_notation].each do |board_square|
       print unicode_board(:vertical)
 
       if board_square.piece.nil?
@@ -487,6 +490,8 @@ end
 
 
 class Person
+  include ChessConstants
+
   attr_accessor :board, :name
 
   def initialize(board, name)
@@ -495,22 +500,31 @@ class Person
   end
 
   def get_move
-    puts("Please input letter of moving piece.")
-    letter = gets.chomp
-    puts("Please input number of moving piece.")
-    number = gets.chomp
-    prior_square = @board.get_square_from_notation(letter, number.to_i)
+    puts "Please enter the board square of the piece you want to move."
+    input = get_valid_input #TODO need to check if piece color is correct/move is valid    
 
-    puts("Please input new letter.")
-    new_letter = gets.chomp
-    puts("please input new number.")
-    new_number = gets.chomp
+    prior_square = @board.get_square_from_notation(input[0], input[1].to_i)
+
+    puts "Please the board square for where to move the piece."
+    input = get_valid_input #TODO need to check is move is valid 
     
-    new_square = @board.get_square_from_notation(new_letter, new_number.to_i)
+    new_square = @board.get_square_from_notation(input[0], input[1].to_i)
     new_square.piece = prior_square.piece
     prior_square.piece = nil
   end
+  
+  def get_valid_input
+    loop do
+      puts "Please enter a board square with correct notation. (eg. e4)"
+      input = gets.chomp.gsub(/\s+/, "").downcase
+      if ((input.length == 2) && L_ARRAY.include?(input[0]) && N_ARRAY.include?(input[1].to_i)) #TODO refactor
+        return input
+      end
+    end
+	end
 end
+
+
 
 class Computer
   attr_accessor :board
