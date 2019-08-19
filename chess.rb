@@ -413,9 +413,10 @@ class Piece
   end
 
   def add_if_valid(child_array, new_l_n_index, new_n_n_index)
-    if @board.square_index_exists?(new_l_n_index, new_n_n_index)
-      child_array << @board.get_square_from_index(new_l_n_index, new_n_n_index)
-    end
+
+    return nil if @board.square_index_exists?(new_l_n_index, new_n_n_index) == false
+
+    child_array << @board.get_square_from_index(new_l_n_index, new_n_n_index)
     return nil
   end
 end
