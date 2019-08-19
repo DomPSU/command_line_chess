@@ -324,7 +324,7 @@ class Board
     @array[4][1] = BoardSquare.new("b", "4", "black")
     @array[4][2] = BoardSquare.new("c", "4", "white")
     @array[4][3] = BoardSquare.new("d", "4", "black")
-    @array[4][4] = BoardSquare.new("e", "4", "white")
+    @array[4][4] = BoardSquare.new("e", "4", "white", Rook.new("white", self))
     @array[4][5] = BoardSquare.new("f", "4", "black")
     @array[4][6] = BoardSquare.new("g", "4", "white")
     @array[4][7] = BoardSquare.new("h", "4", "black")
@@ -413,6 +413,16 @@ class Piece
     @never_moved = true
   end
 
+  def l_index
+    parent_square = @board.get_square_from_piece(self)  
+    return L_ARRAY.index(parent_square.l_notation)
+  end
+
+  def n_index
+    parent_square = @board.get_square_from_piece(self)  
+    return N_ARRAY.index(parent_square.n_notation)
+  end
+
   def valid_move?(parent_color, child_array, new_l_n_index, new_n_n_index) #TODO refactor entire method
 
     return false if square_index_exists?(new_l_n_index, new_n_n_index) == false
@@ -428,14 +438,14 @@ class Piece
   end
 
   def add_if_valid(child_array, l_index_shift, n_index_shift)
-    parent_square = @board.get_square_from_piece(self)  
-
-    new_l_n_index = L_ARRAY.index(parent_square.l_notation) + l_index_shift
-    new_n_n_index = N_ARRAY.index(parent_square.n_notation) + n_index_shift
+    new_l_n_index = self.l_index + l_index_shift
+    new_n_n_index = self.n_index + n_index_shift
 
     if valid_move?(self.color, child_array, new_l_n_index, new_n_n_index)
-      child_array << @board.get_square_from_index(new_l_n_index, new_n_n_index)
+      child_array << @board.get_square_from_index(new_l_n_index, new_n_n_index)   
+      return true
     end
+   return false
   end
 end
 
@@ -485,6 +495,17 @@ class Knight < Piece
 end
 
 class Rook < Piece
+  def get_child_array   
+    child_array = []
+
+    index = 0
+
+    while add_if_valid(child_array, self.l_index, index) == true
+      index += 1
+    end
+
+    return child_array
+  end
 end
 
 class Bishop < Piece
@@ -641,9 +662,18 @@ end
 
 board = Board.new
 
-squares = board.get_square_from_notation("b","1").piece.get_child_array
+display = Display.new(board)
 
-squares.each {|x| x.info}
+squares1 = board.get_square_from_notation("b","1").piece.get_child_array
 
+squares1.each {|x| x.info}
+
+display.contents
+
+squares2 = board.get_square_from_notation("e","4").piece.get_child_array
+
+squares2.each {|x| x.info}
+
+display.contents
 
 
