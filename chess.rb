@@ -7,20 +7,48 @@ module ChessConstants
 end
 
 class GameController
-  attr_accessor :board, :display, :white, :black, :players
+  attr_accessor :board, :display, :white, :black, :players, :current_player
   
   def initialize
     @board = Board.new
     @display = Display.new(@board)
     @white = nil
     @black = nil
-    @players = [Person.new(@board)]
+    @players = [Person.new(@board, "Player One")]
+    @current_player = nil
   end
 
   def play_match #TODO update
     @players << set_opponet_type
     set_colors
     announce_colors
+
+    while ((checkmate? == false) && (draw? == false))
+      announce_current_player
+      @current_player.get_move
+      switch_current_player #TODO refactor
+    end 
+  end
+
+  def announce_current_player #TODO refactor output
+    puts "Computer turn." if @current_player.class == Computer
+    puts "#{@current_player.name} turn." if @current_player.class == Person
+  end
+
+  def switch_current_player #TODO refactor
+    if @current_player == @white
+      @current_player = @black
+    elsif @current_player == @black
+      @current_player = @white
+    end
+  end
+
+  def checkmate? #TODO
+    return false
+  end
+
+  def draw? #TODO
+    return false
   end
 
   def set_opponet_type
@@ -31,14 +59,15 @@ class GameController
       input = gets.chomp.gsub(/\s+/, "").upcase
       puts("")
 
-      return Person.new(@board) if input == "P"
+      return Person.new(@board, "Player Two") if input == "P"
       
       return Computer.new(@board) if input == "C"
     end
   end
 
-  def set_colors #TODO update
+  def set_colors
     @white = @players.sample
+    @current_player = @white
     
     @black = @players[0] if @players[1] == @white
     @black = @players[1] if @players[0] == @white
@@ -56,10 +85,6 @@ class GameController
       puts "Player two will play as white."
     end
     puts("")
-  end
-
-  def get_move #TODO update
-    #@white.get_move
   end
 end
 
@@ -462,16 +487,17 @@ end
 
 
 class Person
-  attr_accessor :board
+  attr_accessor :board, :name
 
-  def initialize(board)
+  def initialize(board, name)
     @board = board
+    @name = name
   end
 
   def get_move
-    puts("Please input piece to move letter.")
+    puts("Please input letter of moving piece.")
     letter = gets.chomp
-    puts("Please input piece to move number.")
+    puts("Please input number of moving piece.")
     number = gets.chomp
     prior_square = @board.get_square_from_notation(letter, number.to_i)
 
@@ -491,6 +517,9 @@ class Computer
 
   def initialize(board)
     @board = board
+  end
+
+  def get_move
   end
 end
 
