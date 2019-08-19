@@ -402,11 +402,12 @@ end
 class Piece
   include ChessConstants
 
-  attr_accessor :color, :board
+  attr_accessor :color, :board, :never_moved
 
   def initialize(color, board)
     @color = color
     @board = board
+    @never_moved = true
   end
 
   def valid_move?(new_l_n_index, new_n_n_index)
