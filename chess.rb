@@ -35,6 +35,7 @@ class GameController
 
   def announce_current_player
     puts "It is #{@current_player.name}'s turn."
+    puts ""
   end
 
   def switch_current_player #TODO refactor
@@ -57,9 +58,10 @@ class GameController
     loop do
       puts "Enter P if you would like to play agaisnt another person."
       puts "Enter C if you would like to play agaisnt a computer."
+      puts ""
 
       input = gets.chomp.gsub(/\s+/, "").upcase
-      puts("")
+      puts ""
 
       return Person.new(@board, "Player two") if input == "P"
       
@@ -483,6 +485,8 @@ class Pawn < Piece
 end
 
 class Player
+  include ChessConstants
+
   attr_accessor :board, :name, :piece_color
 
   def initialize(board, name = nil)
@@ -519,18 +523,39 @@ class Player
     end
     return true
   end
+
+  def valid_notation_input(input)
+    if input.length != 2
+      puts "Input not correct length. Please input one letter and one number."
+
+      return false
+    elsif ((L_ARRAY.include?(input[0]) == false)\
+          && (N_ARRAY.include?(input[1]) == false))
+
+      puts "Please enter a letter, then a number. Both within range."
+
+      return false
+    elsif L_ARRAY.include?(input[0]) == false
+      puts "Please enter a letter within range."
+
+      return false
+    elsif N_ARRAY.include?(input[1]) == false
+      puts "Please enter a number within range."
+
+      return false
+    end
+    return true
+  end
 end
 
 class Person < Player
-  include ChessConstants
-
   def get_move
     puts "Please enter the board square of the piece you want to move."
     input = get_valid_input #TODO need to check if piece color is correct/move is valid    
 
     prior_square = @board.get_square_from_notation(input[0], input[1])
 
-    puts "Please the board square for where to move the piece."
+    puts "Please enter the board square for where to move the piece."
     input = get_valid_input #TODO need to check is move is valid 
     
     new_square = @board.get_square_from_notation(input[0], input[1])
@@ -539,12 +564,10 @@ class Person < Player
   end
   
   def get_valid_input
+    puts "Please use correct notation. (eg. e4)"
     loop do
-      puts "Please enter a board square with correct notation. (eg. e4)"
       input = gets.chomp.gsub(/\s+/, "").downcase
-      if ((input.length == 2)\
-         && L_ARRAY.include?(input[0])\
-         && N_ARRAY.include?(input[1]))
+      if valid_notation_input(input) == true
 
         return input
       end
