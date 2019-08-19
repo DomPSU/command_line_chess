@@ -20,9 +20,11 @@ class GameController
 
   def play_match #TODO update
     @players << set_opponet_type
+    
     set_colors
     announce_colors
 
+    @current_player = @white
     while ((checkmate? == false) && (draw? == false))
       @display.contents
       announce_current_player
@@ -68,10 +70,12 @@ class GameController
 
   def set_colors
     @white = @players.sample
-    @current_player = @white
     
     @black = @players[0] if @players[1] == @white
     @black = @players[1] if @players[0] == @white
+
+    @white.piece_color = "white"    
+    @black.piece_color = "black"
   end
 
   def announce_colors
@@ -492,11 +496,12 @@ end
 class Person
   include ChessConstants
 
-  attr_accessor :board, :name
+  attr_accessor :board, :name, :piece_color
 
   def initialize(board, name)
     @board = board
     @name = name
+    @piece_color = nil
   end
 
   def get_move
@@ -525,6 +530,10 @@ class Person
       end
     end
 	end
+
+  def current_player_piece?
+  end
+
 end
 
 
