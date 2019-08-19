@@ -456,11 +456,12 @@ class Knight < Piece
 =end
 
   def get_child_array
-    parent = @board.get_square_from_piece(self)    
-
+    parent_square = @board.get_square_from_piece(self)   
     child_array = []
-    parent_l_n_index = L_ARRAY.index(parent.l_notation)
-    parent_n_n_index = N_ARRAY.index(parent.n_notation)
+
+
+    parent_l_n_index = L_ARRAY.index(parent_square.l_notation)
+    parent_n_n_index = N_ARRAY.index(parent_square.n_notation)
 
     add_if_valid(self.color, child_array, parent_l_n_index + 1,
                                           parent_n_n_index + 2)
