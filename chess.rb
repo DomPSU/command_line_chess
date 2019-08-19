@@ -416,6 +416,13 @@ class Piece
   def add_if_valid(child_array, new_l_n_index, new_n_n_index)
 
     return nil if square_index_exists?(new_l_n_index, new_n_n_index) == false
+    board_square = @board.get_square_from_index(new_l_n_index, new_n_n_index)
+
+    if board_square.piece == nil
+
+    elsif board_square.piece.color == "white"
+      return nil
+    end
 
     child_array << @board.get_square_from_index(new_l_n_index, new_n_n_index)
     return nil
