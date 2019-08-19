@@ -420,6 +420,7 @@ class Piece
 end
 
 class Knight < Piece
+
 =begin
   def build_move_tree(start_square, depth)
     root = Node.new(nil, start_square.l_notation, start_square.n_notation)
@@ -616,7 +617,6 @@ class Person < Player
 end
 
 class Computer < Player
-  
 end
 
 game_controller = GameController.new()
