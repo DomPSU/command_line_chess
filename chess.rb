@@ -32,7 +32,7 @@ class GameController
     @current_player = nil
   end
 
-  def play_match #TODO update
+  def play_match #TODO 
     @players << set_opponet_type
     
     set_colors
@@ -43,7 +43,7 @@ class GameController
       @display.contents
       announce_current_player
       @current_player.get_move
-      switch_current_player #TODO refactor
+      switch_current_player #REFACTOR
     end 
   end
 
@@ -52,7 +52,7 @@ class GameController
     puts ""
   end
 
-  def switch_current_player #TODO refactor
+  def switch_current_player #REFACTOR
     if @current_player == @white
       @current_player = @black
     elsif @current_player == @black
@@ -60,11 +60,11 @@ class GameController
     end
   end
 
-  def checkmate? #TODO update
+  def checkmate? #TODO 
     return false
   end
 
-  def draw? #TODO update
+  def draw? #TODO 
     return false
   end
 
@@ -123,7 +123,7 @@ class BoardSquare
     @piece = piece
   end
 
-  def info #TODO test function to eventually delete
+  def info #TEST function to eventually delete
     print "#{@l_notation} #{@n_notation} #{@color} #{@piece}"
     print " nil " if @piece.nil?
 
@@ -392,7 +392,7 @@ class Board
     return nil
   end
 
-  def display_info #TODO test function delete when finished
+  def display_info #TEST function delete when finished
     self.board_array.each do |sub_array|   
       puts("")     
       sub_array.each do |board_square|
@@ -423,7 +423,7 @@ class Piece
     return N_ARRAY.index(parent_square.n_notation)
   end
 
-  def valid_move?(parent_color, child_array, new_l_n_index, new_n_n_index) #TODO refactor entire method
+  def valid_move?(parent_color, child_array, new_l_n_index, new_n_n_index) #REFACTOR
 
     return false if square_index_exists?(new_l_n_index, new_n_n_index) == false
     board_square = @board.get_square_from_index(new_l_n_index, new_n_n_index)
@@ -566,7 +566,7 @@ class Queen < Piece
   end
 end
 
-class King < Piece #TODO need to add castling mechanic
+class King < Piece #TODO castling
   def get_child_array   
     child_array = []
 
