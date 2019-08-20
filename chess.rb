@@ -498,10 +498,40 @@ class Rook < Piece
   def get_child_array   
     child_array = []
 
-    index = 0
+    index = 1
 
-    while add_if_valid(child_array, self.l_index, index) == true
+    while add_if_valid(child_array, 0, index) == true
       index += 1
+      if child_array[-1].piece != nil
+        break
+      end
+    end
+
+    index = 1
+
+    while add_if_valid(child_array, index, 0) == true
+      index += 1
+      if child_array[-1].piece != nil
+        break
+      end
+    end
+
+    index = -1
+
+    while add_if_valid(child_array, 0, index) == true
+      index -= 1
+      if child_array[-1].piece != nil
+        break
+      end
+    end
+
+    index = -1
+
+    while add_if_valid(child_array, index, 0) == true
+      index -= 1
+      if child_array[-1].piece != nil
+        break
+      end
     end
 
     return child_array
@@ -673,6 +703,7 @@ display.contents
 squares2 = board.get_square_from_notation("e","4").piece.get_child_array
 
 squares2.each {|x| x.info}
+puts(squares2.size)
 
 display.contents
 
