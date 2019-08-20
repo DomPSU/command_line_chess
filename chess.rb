@@ -744,8 +744,10 @@ class Player
     end       
 
     puts ""
+    puts("All child array")
+    puts ""
 
-    king_in_check?
+    puts(king_in_check?)
   end
 
   def valid_piece_to_move?(l_notation, n_notation) #REFACTOR
