@@ -41,11 +41,10 @@ class GameController
     @current_player = @white
 
     while ((checkmate? == false) && (draw? == false))
-      @display.contents
-      announce_current_player
-
       current_player.info #just for testing.
 
+      @display.contents
+      announce_current_player
       @current_player.get_move
       puts ("")
       switch_current_player #REFACTOR
@@ -629,6 +628,8 @@ class Pawn < Piece #TODO En Passant, #TODO First move can be moved twice
     if self.color == "white"
       add_if_valid(child_array, 0, 1) if piece_in_front? == false
 
+      add_if_valid(child_array, 0, 2) if self.never_moved == true
+
       add_if_valid(child_array, 1, 1) if cross_capture?(1)
 
       add_if_valid(child_array, -1, 1) if cross_capture?(-1)
@@ -636,6 +637,8 @@ class Pawn < Piece #TODO En Passant, #TODO First move can be moved twice
 
     if self.color == "black"
       add_if_valid(child_array, 0, -1) if piece_in_front? == false
+
+      add_if_valid(child_array, 0, -2) if self.never_moved == true
 
       add_if_valid(child_array, 1, -1) if cross_capture?(1)
 
