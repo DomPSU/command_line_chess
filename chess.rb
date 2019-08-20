@@ -300,7 +300,7 @@ class Board
     @array[1][0] = BoardSquare.new("a", "7", "black", Pawn.new("black", self))
     @array[1][1] = BoardSquare.new("b", "7", "white", Pawn.new("black", self))
     @array[1][2] = BoardSquare.new("c", "7", "black", Pawn.new("black", self))
-    @array[1][3] = BoardSquare.new("d", "7", "white", Pawn.new("black", self))
+    @array[1][3] = BoardSquare.new("d", "7", "white")#, Pawn.new("black", self))
     @array[1][4] = BoardSquare.new("e", "7", "black", Pawn.new("black", self))
     @array[1][5] = BoardSquare.new("f", "7", "white", Pawn.new("black", self))
     @array[1][6] = BoardSquare.new("g", "7", "black", Pawn.new("black", self))
@@ -344,7 +344,7 @@ class Board
 
     @array[6][0] = BoardSquare.new("a", "2", "white", Pawn.new("white", self))
     @array[6][1] = BoardSquare.new("b", "2", "black", Pawn.new("white", self))
-    @array[6][2] = BoardSquare.new("c", "2", "white", Pawn.new("white", self))
+    @array[6][2] = BoardSquare.new("c", "2", "white")#, Pawn.new("white", self))
     @array[6][3] = BoardSquare.new("d", "2", "black", Pawn.new("white", self))
     @array[6][4] = BoardSquare.new("e", "2", "white", Pawn.new("white", self))
     @array[6][5] = BoardSquare.new("f", "2", "black", Pawn.new("white", self))
@@ -702,7 +702,6 @@ class Player
     @opponent_board_squares.each do |board_square| 
       child_array = board_square.piece.get_child_array
       child_array.each do |child|
-      
 =begin
         if child.piece == nil
           puts ("no piece.")
@@ -710,7 +709,6 @@ class Player
           puts ("#{child.piece} #{child.color}")
         end
 =end
-
         if child.piece.class == King
           puts ("KING IS IN CHECK")
           return true
@@ -720,6 +718,9 @@ class Player
     return false  
   end
 
+  #this most likely does not handle case of bishop can move toward piece causing check.
+  #or bishop can just capture piece. 
+  #maybe this is not even needed
   def move_would_cause_check?(board_square) #REFACTOR
     saved_piece = board_square.piece
 
@@ -733,22 +734,49 @@ class Player
     return false
   end
 
+  def move_removes_check? (piece, new_board_square)
+    starting_board_square = @board.get_square_from_piece(piece)
+    
+    saved_starting_piece = starting_board_square.piece
+
+    starting_board_square.piece = nil
+
+    saved_new_board_square_piece = new_board_square.piece
+    new_board_square.piece = saved_starting_piece
+
+    if king_in_check? == false
+      new_board_square.piece = saved_new_board_square_piece
+      starting_board_square.piece = saved_starting_piece
+      return true
+    end
+    new_board_square.piece = saved_new_board_square_piece
+    starting_board_square.piece = saved_starting_piece
+    return false    
+  end
+
   #capturing piece
   #block between piece and king
   #move if king
-  def piece_can_prevent_check?(board_square) #REFACTOR
+  def piece_can_prevent_check?(starting_board_square) #REFACTOR
     
-    child_array = board_square.piece.get_child_array
-    puts "child array below"
-    puts ""
-    puts (child_array)
-    
-    #simulate all moves of child array
+    child_array = starting_board_square.piece.get_child_array
 
-    # if one move prevents check, return true
+    saved_starting_piece = starting_board_square.piece
 
-    return true #temporary must delete
+    starting_board_square.piece = nil
 
+    child_array.each do |new_board_square|
+      saved_new_board_square_piece = new_board_square.piece
+      new_board_square.piece = saved_starting_piece
+      if king_in_check? == false
+        new_board_square.piece = saved_new_board_square_piece
+        starting_board_square.piece = saved_starting_piece
+        return true
+      end
+      new_board_square.piece = saved_new_board_square_piece
+    end
+
+    starting_board_square.piece = saved_starting_piece
     return false
   end
 
@@ -809,7 +837,6 @@ class Player
       return false  
     end
 
-    #should maybe swap with below
     if ((king_in_check? == true) &&
        (piece_can_prevent_check?(board_square) == false))
 
@@ -818,17 +845,6 @@ class Player
 
       return false
     end
-
-    #should maybe swap with above
-    if move_would_cause_check?(board_square) == true
-      puts "Moving this piece would cause check."
-      puts ""
- 
-      return false
-    end
-
-    #king cannot move into check
-
     return true
   end
 
@@ -842,8 +858,14 @@ class Player
       return false    
     end
 
-    #if king is in check. Must prevent check
+    if ((king_in_check? == true) && 
+       (move_removes_check?(piece, board_square) == false))
 
+      puts "Piece must remove check."
+      puts ""
+
+      return false 
+    end
     return true
   end
 end
