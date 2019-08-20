@@ -41,7 +41,7 @@ class GameController
     @current_player = @white
 
     while ((checkmate? == false) && (draw? == false))
-      current_player.info #just for testing.
+      #current_player.info #just for testing.
 
       @display.contents
       announce_current_player
@@ -653,7 +653,6 @@ class Player
 
   attr_accessor :board, :name, :piece_color, :board_squares,
                 :opponent_board_squares, :king_check
-    #idk if board_squares and o_b_s needs to be an instance variable. Can maybe be hidden.
 
   def initialize(board, name = nil)
     @board = board
@@ -664,7 +663,7 @@ class Player
     @king_check = false
   end
   
-  def update_board_squares #REFACTOR
+  def update_board_squares
     @board_squares = []
 
     @board.array.each do |sub_array|        
@@ -679,7 +678,7 @@ class Player
     return nil
   end
 
-  def update_opponent_board_squares #REFACTOR
+  def update_opponent_board_squares
     @opponent_board_squares = []
 
     @board.array.each do |sub_array|        
@@ -696,7 +695,7 @@ class Player
     return @opponent_board_squares
   end
 
-  def king_in_check? #REFACTOR
+  def king_in_check? #FIX?? and REFACTOR
     update_opponent_board_squares #this update may be unncessary
 
     @opponent_board_squares.each do |board_square| 
@@ -721,20 +720,32 @@ class Player
   #this most likely does not handle case of bishop can move toward piece causing check.
   #or bishop can just capture piece. 
   #maybe this is not even needed
-  def move_would_cause_check?(board_square) #REFACTOR
-    saved_piece = board_square.piece
 
-    board_square.piece = nil
- 
-    if king_in_check? == true      #ternary operator?
-      board_square.piece = saved_piece
+  def move_would_cause_check?(piece, new_board_square) #REFACTOR
+    puts ("started move_would_cause_check? method")
+    starting_board_square = @board.get_square_from_piece(piece)
+    
+    saved_starting_piece = starting_board_square.piece
+
+    starting_board_square.piece = nil
+
+    saved_new_board_square_piece = new_board_square.piece
+    new_board_square.piece = saved_starting_piece
+
+    if king_in_check? == true
+      puts ("enterd if statement")
+      new_board_square.piece = saved_new_board_square_piece
+      starting_board_square.piece = saved_starting_piece
       return true
     end
-    board_square.piece = saved_piece
-    return false
+    puts ("entered return false statement")
+    new_board_square.piece = saved_new_board_square_piece
+    starting_board_square.piece = saved_starting_piece
+    return false   
   end
 
-  def move_removes_check? (piece, new_board_square)
+  def move_removes_check? (piece, new_board_square) #FIX
+    puts ("started move_remove_check? method")
     starting_board_square = @board.get_square_from_piece(piece)
     
     saved_starting_piece = starting_board_square.piece
@@ -745,10 +756,12 @@ class Player
     new_board_square.piece = saved_starting_piece
 
     if king_in_check? == false
+      puts ("enterd if statement")
       new_board_square.piece = saved_new_board_square_piece
       starting_board_square.piece = saved_starting_piece
       return true
     end
+    puts ("entered return false statement")
     new_board_square.piece = saved_new_board_square_piece
     starting_board_square.piece = saved_starting_piece
     return false    
@@ -813,7 +826,7 @@ class Player
     puts(king_in_check?)
   end
 
-  def valid_piece_to_move?(l_notation, n_notation) #REFACTOR
+  def valid_piece_to_move?(l_notation, n_notation) #REFACTOR??
     board_square = @board.get_square_from_notation(l_notation, n_notation)
 
     if board_square.piece == nil
@@ -838,7 +851,7 @@ class Player
     end
 
     if ((king_in_check? == true) &&
-       (piece_can_prevent_check?(board_square) == false))
+       (piece_can_prevent_check?(board_square) == false)) #REFACTOR??
 
       puts "King is in check and piece cannot prevent."
       puts ""
@@ -852,16 +865,24 @@ class Player
     board_square = @board.get_square_from_notation(l_notation, n_notation)
 
     if piece.get_child_array.include?(board_square) == false
-      puts "Piece cannot move to that position."
+      puts "Piece cannot move to that position. Please pick a valid position."
       puts ""
 
       return false    
     end
 
+    if move_would_cause_check?(piece, board_square) == true
+      puts "Move would cause check. Please pick a move that does not cause "\
+           "check."
+      puts ""
+
+      return false 
+    end
+
     if ((king_in_check? == true) && 
        (move_removes_check?(piece, board_square) == false))
 
-      puts "Piece must remove check."
+      puts "Piece must remove check. Please pick a move that prevents check."
       puts ""
 
       return false 
@@ -898,7 +919,7 @@ class Person < Player
   end
   
   def get_piece_to_move #TODO use yield to make one single function
-    puts "Please use correct notation. (eg. e4)"
+    puts "Please use correct notation. (eg. e4)" #castle short, castle long
     puts ""
   
     loop do
