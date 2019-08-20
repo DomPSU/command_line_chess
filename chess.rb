@@ -702,11 +702,14 @@ class Player
     @opponent_board_squares.each do |board_square| 
       child_array = board_square.piece.get_child_array
       child_array.each do |child|
+      
+=begin
         if child.piece == nil
           puts ("no piece.")
         elsif
           puts ("#{child.piece} #{child.color}")
         end
+=end
 
         if child.piece.class == King
           puts ("KING IS IN CHECK")
@@ -728,6 +731,28 @@ class Player
     end
     board_square.piece = saved_piece
     return false
+  end
+
+  #capturing piece
+  #block between piece and king
+  #move if king
+  def piece_can_prevent_check?(board_square) #REFACTOR
+    
+    child_array = board_square.piece.get_child_array
+    puts "child array below"
+    puts ""
+    puts (child_array)
+    
+    #simulate all moves of child array
+
+    # if one move prevents check, return true
+
+    return true #temporary must delete
+
+    return false
+  end
+
+  def simulate_move
   end
 
   def info #TEST function
@@ -784,14 +809,23 @@ class Player
       return false  
     end
 
+    #should maybe swap with below
+    if ((king_in_check? == true) &&
+       (piece_can_prevent_check?(board_square) == false))
+
+      puts "King is in check and piece cannot prevent."
+      puts ""
+
+      return false
+    end
+
+    #should maybe swap with above
     if move_would_cause_check?(board_square) == true
       puts "Moving this piece would cause check."
       puts ""
  
       return false
     end
-
-    #return false unless piece.child array contains move to prevent check
 
     #king cannot move into check
 
