@@ -288,7 +288,7 @@ class Board
     @array[0][1] = BoardSquare.new("b", "8", "black", Knight.new("black", self))
     @array[0][2] = BoardSquare.new("c", "8", "white", Bishop.new("black", self))
     @array[0][3] = BoardSquare.new("d", "8", "black", Queen.new("black", self))
-    @array[0][4] = BoardSquare.new("e", "8", "white", Pawn.new("white", self))
+    @array[0][4] = BoardSquare.new("e", "8", "white", King.new("black", self))
     @array[0][5] = BoardSquare.new("f", "8", "black", Bishop.new("black", self))
     @array[0][6] = BoardSquare.new("g", "8", "white", Knight.new("black", self))
     @array[0][7] = BoardSquare.new("h", "8", "black", Rook.new("black", self))
@@ -590,13 +590,16 @@ class King < Piece #TODO need to add castling mechanic
   end
 end
 
-class Pawn < Piece #TODO En Passant, First move can be moved twice. Also edge case near top of board
+class Pawn < Piece #TODO En Passant, #TODO First move can be moved twice
   def cross_capture?(l_index_shift)
-    cross_capture_l_index = self.l_index + l_index_shift
-    cross_capture_n_index = self.n_index + 1 #TODO ternary operator for the +1 or -1 depending on piece color
+    l_index = self.l_index + l_index_shift
 
-    cross_capture_square = @board.get_square_from_index(cross_capture_l_index,
-                                                        cross_capture_n_index)
+    n_index = self.n_index + 1 if self.color == "white"
+    n_index = self.n_index - 1 if self.color == "black"
+
+    #No error handling if square does not exist.
+    #Square will always exist since pawn promotes on last square
+    cross_capture_square = @board.get_square_from_index(l_index, n_index)
 
     return false if cross_capture_square.piece == nil
     return false if self.color == cross_capture_square.piece.color
@@ -606,18 +609,21 @@ class Pawn < Piece #TODO En Passant, First move can be moved twice. Also edge ca
   def get_child_array   
     child_array = []
 
+    if self.color == "white"
+      add_if_valid(child_array, 0, 1)
 
-    add_if_valid(child_array, 0, 1) if self.color == "white"
-    if ((self.color == "white") && (cross_capture?(1)))
-      add_if_valid(child_array, 1, 1) 
-    end
-    if ((self.color == "white") && (cross_capture?(-1)))
-      add_if_valid(child_array, -1, 1) 
+      add_if_valid(child_array, 1, 1) if cross_capture?(1)
+
+      add_if_valid(child_array, -1, 1) if cross_capture?(-1)
     end
 
-    add_if_valid(child_array, 0, -1) if self.color == "black"
-    add_if_valid(child_array, 1, 1) if self.color == "black"
-    add_if_valid(child_array, -1, 1) if self.color == "black"
+    if self.color == "black"
+      add_if_valid(child_array, 0, -1)
+
+      add_if_valid(child_array, 1, -1) if cross_capture?(1)
+
+      add_if_valid(child_array, -1, -1) if cross_capture?(-1)
+    end
 
     return child_array
   end
@@ -775,10 +781,5 @@ squares2 = board.get_square_from_notation("e","7").piece.get_child_array
 
 squares2.each {|x| x.info}
 
-display.contents
-
-squares3 = board.get_square_from_notation("e","8").piece.get_child_array
-
-squares3.each {|x| x.info}
 
 
