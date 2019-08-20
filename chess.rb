@@ -288,7 +288,7 @@ class Board
     @array[0][1] = BoardSquare.new("b", "8", "black", Knight.new("black", self))
     @array[0][2] = BoardSquare.new("c", "8", "white", Bishop.new("black", self))
     @array[0][3] = BoardSquare.new("d", "8", "black", Queen.new("black", self))
-    @array[0][4] = BoardSquare.new("e", "8", "white", King.new("black", self))
+    @array[0][4] = BoardSquare.new("e", "8", "white", Pawn.new("white", self))
     @array[0][5] = BoardSquare.new("f", "8", "black", Bishop.new("black", self))
     @array[0][6] = BoardSquare.new("g", "8", "white", Knight.new("black", self))
     @array[0][7] = BoardSquare.new("h", "8", "black", Rook.new("black", self))
@@ -297,7 +297,7 @@ class Board
     @array[1][1] = BoardSquare.new("b", "7", "white", Pawn.new("black", self))
     @array[1][2] = BoardSquare.new("c", "7", "black", Pawn.new("black", self))
     @array[1][3] = BoardSquare.new("d", "7", "white", Pawn.new("black", self))
-    @array[1][4] = BoardSquare.new("e", "7", "black", Pawn.new("black", self))
+    @array[1][4] = BoardSquare.new("e", "7", "black", Pawn.new("white", self))
     @array[1][5] = BoardSquare.new("f", "7", "white", Pawn.new("black", self))
     @array[1][6] = BoardSquare.new("g", "7", "black", Pawn.new("black", self))
     @array[1][7] = BoardSquare.new("h", "7", "white", Pawn.new("black", self))
@@ -309,12 +309,12 @@ class Board
     @array[2][4] = BoardSquare.new("e", "6", "white")
     @array[2][5] = BoardSquare.new("f", "6", "black")
     @array[2][6] = BoardSquare.new("g", "6", "white")
-    @array[2][7] = BoardSquare.new("h", "6", "black", King.new("white", self))
+    @array[2][7] = BoardSquare.new("h", "6", "black")
 
     @array[3][0] = BoardSquare.new("a", "5", "black")
     @array[3][1] = BoardSquare.new("b", "5", "white")
     @array[3][2] = BoardSquare.new("c", "5", "black")
-    @array[3][3] = BoardSquare.new("d", "5", "white")
+    @array[3][3] = BoardSquare.new("d", "5", "white", Pawn.new("black", self))
     @array[3][4] = BoardSquare.new("e", "5", "black")
     @array[3][5] = BoardSquare.new("f", "5", "white")
     @array[3][6] = BoardSquare.new("g", "5", "black")
@@ -324,7 +324,7 @@ class Board
     @array[4][1] = BoardSquare.new("b", "4", "black")
     @array[4][2] = BoardSquare.new("c", "4", "white")
     @array[4][3] = BoardSquare.new("d", "4", "black")
-    @array[4][4] = BoardSquare.new("e", "4", "white")
+    @array[4][4] = BoardSquare.new("e", "4", "white", Pawn.new("white", self))
     @array[4][5] = BoardSquare.new("f", "4", "black")
     @array[4][6] = BoardSquare.new("g", "4", "white")
     @array[4][7] = BoardSquare.new("h", "4", "black")
@@ -590,7 +590,37 @@ class King < Piece #TODO need to add castling mechanic
   end
 end
 
-class Pawn < Piece
+class Pawn < Piece #TODO En Passant, First move can be moved twice. Also edge case near top of board
+  def cross_capture?(l_index_shift)
+    cross_capture_l_index = self.l_index + l_index_shift
+    cross_capture_n_index = self.n_index + 1 #TODO ternary operator for the +1 or -1 depending on piece color
+
+    cross_capture_square = @board.get_square_from_index(cross_capture_l_index,
+                                                        cross_capture_n_index)
+
+    return false if cross_capture_square.piece == nil
+    return false if self.color == cross_capture_square.piece.color
+    return true
+  end
+
+  def get_child_array   
+    child_array = []
+
+
+    add_if_valid(child_array, 0, 1) if self.color == "white"
+    if ((self.color == "white") && (cross_capture?(1)))
+      add_if_valid(child_array, 1, 1) 
+    end
+    if ((self.color == "white") && (cross_capture?(-1)))
+      add_if_valid(child_array, -1, 1) 
+    end
+
+    add_if_valid(child_array, 0, -1) if self.color == "black"
+    add_if_valid(child_array, 1, 1) if self.color == "black"
+    add_if_valid(child_array, -1, 1) if self.color == "black"
+
+    return child_array
+  end
 end
 
 class Player
@@ -735,17 +765,20 @@ board = Board.new
 
 display = Display.new(board)
 
-squares1 = board.get_square_from_notation("b","1").piece.get_child_array
-
-squares1.each {|x| x.info}
-
-display.contents
-
-squares2 = board.get_square_from_notation("h","6").piece.get_child_array
+squares2 = board.get_square_from_notation("e","4").piece.get_child_array
 
 squares2.each {|x| x.info}
-puts(squares2.size)
 
 display.contents
+
+squares2 = board.get_square_from_notation("e","7").piece.get_child_array
+
+squares2.each {|x| x.info}
+
+display.contents
+
+squares3 = board.get_square_from_notation("e","8").piece.get_child_array
+
+squares3.each {|x| x.info}
 
 
