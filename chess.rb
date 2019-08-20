@@ -696,11 +696,23 @@ class Player
     return @opponent_board_squares
   end
 
-  def king_in_check? #cannot do move cause king is in check
+  def king_in_check? #REFACTOR
     update_opponent_board_squares #this update may be unncessary
 
     @opponent_board_squares.each do |board_square| 
-      puts("#{board_square.piece.get_child_array}")
+      child_array = board_square.piece.get_child_array
+      child_array.each do |child|
+        if child.piece == nil
+          puts ("no piece.")
+        elsif
+          puts ("#{child.piece} #{child.color}")
+        end
+
+        if child.piece.class == King
+          puts ("KING IS IN CHECK")
+          return true
+        end
+      end
     end   
   end
 
@@ -758,6 +770,8 @@ class Player
 
       return false  
     end
+  
+    #return false unless piece.child array contains move to prevent check
 
     #movement will not cause check
 
@@ -775,6 +789,8 @@ class Player
 
       return false    
     end
+
+    #if king is in check. Must prevent check
 
     return true
   end
