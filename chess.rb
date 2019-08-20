@@ -601,8 +601,7 @@ class Pawn < Piece #TODO En Passant
     n_index = self.n_index + 1 if self.color == "white"
     n_index = self.n_index - 1 if self.color == "black"
 
-    #No error handling is needed if square does not exist.
-    #Square will always exist since pawn promotes on last square
+    return false if square_index_exists?(l_index, n_index) == false
     cross_capture_square = @board.get_square_from_index(l_index, n_index)
 
     return false if cross_capture_square.piece == nil
@@ -653,34 +652,35 @@ class Player
   include ChessConstants
 
   attr_accessor :board, :name, :piece_color, :board_squares,
-                :opponent_board_squares, :king_check
+                :opponent_board_squares, :king_check 
+    #idk if board_squares and o_b_s needs to be an instance variable. Can maybe be hidden.
 
   def initialize(board, name = nil)
     @board = board
     @name = name
     @piece_color = nil
-    @board_squares = get_board_squares
-    @opponent_board_squares = get_opponent_board_squares
+    @board_squares = update_board_squares
+    @opponent_board_squares = update_opponent_board_squares
     @king_check = false
   end
   
-  def get_board_squares #REFACTOR
-    array = []
+  def update_board_squares #REFACTOR
+    @board_squares = []
 
     @board.array.each do |sub_array|        
       sub_array.each do |board_square|
         if board_square.piece == nil
           #skip
         elsif @piece_color == board_square.piece.color
-          array << board_square
+          @board_squares << board_square
         end
       end
     end
-    return array
+    return nil
   end
 
-  def get_opponent_board_squares #REFACTOR
-    array = []
+  def update_opponent_board_squares #REFACTOR
+    @opponent_board_squares = []
 
     @board.array.each do |sub_array|        
       sub_array.each do |board_square|
@@ -689,21 +689,26 @@ class Player
         elsif @piece_color == board_square.piece.color
           #skip
         else
-          array << board_square
+          @opponent_board_squares << board_square
         end
       end
     end
-    return array
+    return @opponent_board_squares
   end
 
-  def king_in_check?
+  def king_in_check? #cannot do move cause king is in check
+    update_opponent_board_squares #this update may be unncessary
+
+    @opponent_board_squares.each do |board_square| 
+      puts("#{board_square.piece.get_child_array}")
+    end   
   end
 
   def move_would_cause_check?
   end
 
   def info #TEST function
-    @board_squares = get_board_squares
+    update_board_squares
 
     puts("my pieces")
     puts ""
@@ -715,7 +720,7 @@ class Player
 
     puts ""
 
-    @opponent_board_squares = get_opponent_board_squares
+    update_opponent_board_squares
 
     puts ("my opponenet pieces")
     puts ""
@@ -726,6 +731,8 @@ class Player
     end       
 
     puts ""
+
+    king_in_check?
   end
 
   def valid_piece_to_move?(l_notation, n_notation) #REFACTOR
