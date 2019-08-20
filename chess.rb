@@ -677,16 +677,24 @@ class Player
       return false  
     end
 
-    #is within move tree (child_array if player). The other two comments might be taken care of by move tree.
     #movement will not cause check
     # also king cannot move into check
 
     return true
   end
 
-  def valid_square_to_place_piece?(l_notation, n_notation)
+  def valid_square_to_place_piece?(piece, l_notation, n_notation)
     board_square = @board.get_square_from_notation(l_notation, n_notation)
 
+    if piece.get_child_array.include?(board_square) == false
+      puts "Piece cannot move to that position."
+      puts ""
+
+      return false    
+    end
+
+#REVIEW I believe the prior check involivng child_array makes this uneccesarry.
+=begin
     if board_square.piece == nil
       return true
     elsif board_square.piece.color == @piece_color
@@ -695,6 +703,8 @@ class Player
 
       return false
     end
+=end
+
     return true
   end
 
@@ -737,11 +747,12 @@ class Person < Player
     n_notation = piece_to_move_notation[1]
 
     prior_square = @board.get_square_from_notation(l_notation, n_notation)
+    piece = prior_square.piece
 
     puts "Please enter the board square for where to move the piece."
     puts ""
 
-    destination_board_square = get_where_to_move_piece
+    destination_board_square = get_where_to_move_piece(piece)
     
     l_notation = destination_board_square[0]
     n_notation = destination_board_square[1]
@@ -765,14 +776,14 @@ class Person < Player
     end
 	end
 
-  def get_where_to_move_piece #TODO use yield to make one single function
+  def get_where_to_move_piece(piece) #TODO use yield to make one single function
     puts "Please use correct notation. (eg. e4)"
     puts ""
 
     loop do
       input = gets.chomp.gsub(/\s+/, "").downcase
       if ((valid_input?(input) == true)\
-         && valid_square_to_place_piece?(input[0], input[1]) == true)
+         && valid_square_to_place_piece?(piece, input[0], input[1]) == true)
 
         return input
       end
