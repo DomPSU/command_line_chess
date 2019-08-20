@@ -673,10 +673,11 @@ class Player
     return array
   end
 
-  def info #test function
+  def info #TEST function
     @board_squares_occupied = get_board_square_array
     @board_squares_occupied.each do |board_square|
-      puts("#{board_square.piece} #{board_square.piece.color}")
+      print("#{board_square.piece} #{board_square.piece.color} ")
+      puts("#{board_square.piece.never_moved}")
     end 
   end
 
@@ -776,6 +777,7 @@ class Person < Player
 
     new_square = @board.get_square_from_notation(l_notation, n_notation)
     new_square.piece = prior_square.piece
+    new_square.piece.never_moved = false
     prior_square.piece = nil
   end
   
