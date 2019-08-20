@@ -598,7 +598,7 @@ class Pawn < Piece #TODO En Passant, #TODO First move can be moved twice
     n_index = self.n_index + 1 if self.color == "white"
     n_index = self.n_index - 1 if self.color == "black"
 
-    #No error handling if square does not exist.
+    #No error handling is needed if square does not exist.
     #Square will always exist since pawn promotes on last square
     cross_capture_square = @board.get_square_from_index(l_index, n_index)
 
@@ -683,6 +683,7 @@ class Player
     return true
   end
 
+
   def valid_square_to_place_piece?(piece, l_notation, n_notation)
     board_square = @board.get_square_from_notation(l_notation, n_notation)
 
@@ -692,18 +693,6 @@ class Player
 
       return false    
     end
-
-#REVIEW I believe the prior check involivng child_array makes this uneccesarry.
-=begin
-    if board_square.piece == nil
-      return true
-    elsif board_square.piece.color == @piece_color
-      puts "Board square already taken by your piece."
-      puts ""
-
-      return false
-    end
-=end
 
     return true
   end
