@@ -594,7 +594,7 @@ class King < Piece #TODO castling
   end
 end
 
-class Pawn < Piece #TODO En Passant, #TODO First move can be moved twice
+class Pawn < Piece #TODO En Passant
   def cross_capture?(l_index_shift)
     l_index = self.l_index + l_index_shift
 
@@ -649,19 +649,22 @@ class Pawn < Piece #TODO En Passant, #TODO First move can be moved twice
   end
 end
 
-class Player
+class Player 
   include ChessConstants
 
-  attr_accessor :board, :name, :piece_color, :board_squares_occupied
+  attr_accessor :board, :name, :piece_color, :board_squares,
+                :opponent_board_squares, :king_check
 
   def initialize(board, name = nil)
     @board = board
     @name = name
     @piece_color = nil
-    @board_squares_occupied = get_board_square_array
+    @board_squares = get_board_squares
+    @opponent_board_squares = get_opponent_board_squares
+    @king_check = false
   end
   
-  def get_board_square_array
+  def get_board_squares #REFACTOR
     array = []
 
     @board.array.each do |sub_array|        
@@ -676,14 +679,54 @@ class Player
     return array
   end
 
-  def info #TEST function
-    @board_squares_occupied = get_board_square_array
-    @board_squares_occupied.each do |board_square|
-      print("#{board_square.piece} #{board_square.piece.color} ")
-      puts("#{board_square.piece.never_moved}")
-    end 
+  def get_opponent_board_squares #REFACTOR
+    array = []
+
+    @board.array.each do |sub_array|        
+      sub_array.each do |board_square|
+        if board_square.piece == nil
+          #skip
+        elsif @piece_color == board_square.piece.color
+          #skip
+        else
+          array << board_square
+        end
+      end
+    end
+    return array
   end
 
+  def king_in_check?
+  end
+
+  def move_would_cause_check?
+  end
+
+  def info #TEST function
+    @board_squares = get_board_squares
+
+    puts("my pieces")
+    puts ""
+
+    @board_squares .each do |board_square|
+      print("#{board_square.piece} #{board_square.piece.color} ")
+      puts("#{board_square.piece.never_moved}")
+    end
+
+    puts ""
+
+    @opponent_board_squares = get_opponent_board_squares
+
+    puts ("my opponenet pieces")
+    puts ""
+
+    @opponent_board_squares .each do |board_square|
+      print("#{board_square.piece} #{board_square.piece.color} ")
+      puts("#{board_square.piece.never_moved}")
+    end       
+
+    puts ""
+  end
 
   def valid_piece_to_move?(l_notation, n_notation) #REFACTOR
     board_square = @board.get_square_from_notation(l_notation, n_notation)
@@ -710,11 +753,11 @@ class Player
     end
 
     #movement will not cause check
-    # also king cannot move into check
+
+    #king cannot move into check
 
     return true
   end
-
 
   def valid_square_to_place_piece?(piece, l_notation, n_notation)
     board_square = @board.get_square_from_notation(l_notation, n_notation)
@@ -726,33 +769,6 @@ class Player
       return false    
     end
 
-    return true
-  end
-
-  def valid_input?(input)
-    if input.length != 2
-      puts "Input not correct length. Please input one letter and one number."
-      puts ""
-
-      return false
-    elsif ((L_ARRAY.include?(input[0]) == false)\
-          && (N_ARRAY.include?(input[1]) == false))
-
-      puts "Please enter a letter, then a number. Both within range."
-      puts ""
-
-      return false
-    elsif L_ARRAY.include?(input[0]) == false
-      puts "Please enter a letter within range."
-      puts ""
-
-      return false
-    elsif N_ARRAY.include?(input[1]) == false
-      puts "Please enter a number within range."
-      puts ""
-
-      return false
-    end
     return true
   end
 end
@@ -810,6 +826,33 @@ class Person < Player
         return input
       end
     end
+  end
+
+  def valid_input?(input)
+    if input.length != 2
+      puts "Input not correct length. Please input one letter and one number."
+      puts ""
+
+      return false
+    elsif ((L_ARRAY.include?(input[0]) == false)\
+          && (N_ARRAY.include?(input[1]) == false))
+
+      puts "Please enter a letter, then a number. Both within range."
+      puts ""
+
+      return false
+    elsif L_ARRAY.include?(input[0]) == false
+      puts "Please enter a letter within range."
+      puts ""
+
+      return false
+    elsif N_ARRAY.include?(input[1]) == false
+      puts "Please enter a number within range."
+      puts ""
+
+      return false
+    end
+    return true
   end
 end
 
