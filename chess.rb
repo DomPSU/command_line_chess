@@ -43,6 +43,7 @@ class GameController
       @display.contents
       announce_current_player
       @current_player.get_move
+      puts ("")
       switch_current_player #REFACTOR
     end 
   end
@@ -297,7 +298,7 @@ class Board
     @array[1][1] = BoardSquare.new("b", "7", "white", Pawn.new("black", self))
     @array[1][2] = BoardSquare.new("c", "7", "black", Pawn.new("black", self))
     @array[1][3] = BoardSquare.new("d", "7", "white", Pawn.new("black", self))
-    @array[1][4] = BoardSquare.new("e", "7", "black", Pawn.new("white", self))
+    @array[1][4] = BoardSquare.new("e", "7", "black", Pawn.new("black", self))
     @array[1][5] = BoardSquare.new("f", "7", "white", Pawn.new("black", self))
     @array[1][6] = BoardSquare.new("g", "7", "black", Pawn.new("black", self))
     @array[1][7] = BoardSquare.new("h", "7", "white", Pawn.new("black", self))
@@ -314,7 +315,7 @@ class Board
     @array[3][0] = BoardSquare.new("a", "5", "black")
     @array[3][1] = BoardSquare.new("b", "5", "white")
     @array[3][2] = BoardSquare.new("c", "5", "black")
-    @array[3][3] = BoardSquare.new("d", "5", "white", Pawn.new("black", self))
+    @array[3][3] = BoardSquare.new("d", "5", "white")
     @array[3][4] = BoardSquare.new("e", "5", "black")
     @array[3][5] = BoardSquare.new("f", "5", "white")
     @array[3][6] = BoardSquare.new("g", "5", "black")
@@ -324,7 +325,7 @@ class Board
     @array[4][1] = BoardSquare.new("b", "4", "black")
     @array[4][2] = BoardSquare.new("c", "4", "white")
     @array[4][3] = BoardSquare.new("d", "4", "black")
-    @array[4][4] = BoardSquare.new("e", "4", "white", Pawn.new("white", self))
+    @array[4][4] = BoardSquare.new("e", "4", "white")
     @array[4][5] = BoardSquare.new("f", "4", "black")
     @array[4][6] = BoardSquare.new("g", "4", "white")
     @array[4][7] = BoardSquare.new("h", "4", "black")
@@ -343,7 +344,7 @@ class Board
     @array[6][2] = BoardSquare.new("c", "2", "white", Pawn.new("white", self))
     @array[6][3] = BoardSquare.new("d", "2", "black", Pawn.new("white", self))
     @array[6][4] = BoardSquare.new("e", "2", "white", Pawn.new("white", self))
-    @array[6][5] = BoardSquare.new("f", "2", "black", Pawn.new("black", self))
+    @array[6][5] = BoardSquare.new("f", "2", "black", Pawn.new("white", self))
     @array[6][6] = BoardSquare.new("g", "2", "white", Pawn.new("white", self))
     @array[6][7] = BoardSquare.new("h", "2", "black", Pawn.new("white", self))
 
@@ -652,7 +653,7 @@ class Player
     @piece_color = nil
   end
 
-  def valid_piece_to_move?(l_notation, n_notation)
+  def valid_piece_to_move?(l_notation, n_notation) #REFACTOR
     board_square = @board.get_square_from_notation(l_notation, n_notation)
 
     if board_square.piece == nil
@@ -669,9 +670,16 @@ class Player
       return false
     end
 
+    if board_square.piece.get_child_array.size == 0
+      puts "All squares this piece can move to are occupied."
+      puts ""
+
+      return false  
+    end
+
     #is within move tree (child_array if player). The other two comments might be taken care of by move tree.
     #movement will not cause check
-    #has a valid square to move to (specifically king cannot move into check)
+    # also king cannot move into check
 
     return true
   end
@@ -775,35 +783,9 @@ end
 class Computer < Player
 end
 
-#game_controller = GameController.new()
+game_controller = GameController.new()
 
-#game_controller.play_match
-
-board = Board.new
-
-display = Display.new(board)
-
-squares1 = board.get_square_from_notation("e","4").piece.get_child_array
-
-squares1.each {|x| x.info}
-
-display.contents
-
-squares2 = board.get_square_from_notation("e","7").piece.get_child_array
-
-squares2.each {|x| x.info}
-
-display.contents
-
-squares3 = board.get_square_from_notation("d","5").piece.get_child_array
-
-squares3.each {|x| x.info}
-
-display.contents
-
-squares4 = board.get_square_from_notation("f","2").piece.get_child_array
-
-squares4.each {|x| x.info}
+game_controller.play_match
 
 
 
