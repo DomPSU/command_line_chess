@@ -343,7 +343,7 @@ class Board
     @array[6][2] = BoardSquare.new("c", "2", "white", Pawn.new("white", self))
     @array[6][3] = BoardSquare.new("d", "2", "black", Pawn.new("white", self))
     @array[6][4] = BoardSquare.new("e", "2", "white", Pawn.new("white", self))
-    @array[6][5] = BoardSquare.new("f", "2", "black", Pawn.new("white", self))
+    @array[6][5] = BoardSquare.new("f", "2", "black", Pawn.new("black", self))
     @array[6][6] = BoardSquare.new("g", "2", "white", Pawn.new("white", self))
     @array[6][7] = BoardSquare.new("h", "2", "black", Pawn.new("white", self))
 
@@ -606,11 +606,23 @@ class Pawn < Piece #TODO En Passant, #TODO First move can be moved twice
     return true
   end
 
+  def piece_in_front?
+    l_index = self.l_index
+
+    n_index = self.n_index + 1 if self.color == "white"
+    n_index = self.n_index - 1 if self.color == "black"
+
+    board_square = @board.get_square_from_index(l_index, n_index)
+
+    return false if board_square.piece == nil
+    return true
+  end
+
   def get_child_array   
     child_array = []
 
     if self.color == "white"
-      add_if_valid(child_array, 0, 1)
+      add_if_valid(child_array, 0, 1) if piece_in_front? == false
 
       add_if_valid(child_array, 1, 1) if cross_capture?(1)
 
@@ -618,7 +630,7 @@ class Pawn < Piece #TODO En Passant, #TODO First move can be moved twice
     end
 
     if self.color == "black"
-      add_if_valid(child_array, 0, -1)
+      add_if_valid(child_array, 0, -1) if piece_in_front? == false
 
       add_if_valid(child_array, 1, -1) if cross_capture?(1)
 
@@ -771,15 +783,27 @@ board = Board.new
 
 display = Display.new(board)
 
-squares2 = board.get_square_from_notation("e","4").piece.get_child_array
+squares1 = board.get_square_from_notation("e","4").piece.get_child_array
 
-squares2.each {|x| x.info}
+squares1.each {|x| x.info}
 
 display.contents
 
 squares2 = board.get_square_from_notation("e","7").piece.get_child_array
 
 squares2.each {|x| x.info}
+
+display.contents
+
+squares3 = board.get_square_from_notation("d","5").piece.get_child_array
+
+squares3.each {|x| x.info}
+
+display.contents
+
+squares4 = board.get_square_from_notation("f","2").piece.get_child_array
+
+squares4.each {|x| x.info}
 
 
 
