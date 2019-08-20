@@ -324,7 +324,7 @@ class Board
     @array[4][1] = BoardSquare.new("b", "4", "black")
     @array[4][2] = BoardSquare.new("c", "4", "white")
     @array[4][3] = BoardSquare.new("d", "4", "black")
-    @array[4][4] = BoardSquare.new("e", "4", "white", Rook.new("white", self))
+    @array[4][4] = BoardSquare.new("e", "4", "white", Queen.new("white", self))
     @array[4][5] = BoardSquare.new("f", "4", "black")
     @array[4][6] = BoardSquare.new("g", "4", "white")
     @array[4][7] = BoardSquare.new("h", "4", "black")
@@ -531,7 +531,27 @@ class Bishop < Piece
 end
 
 class Queen < Piece
+  def get_child_array   
+    child_array = []
 
+    add_if_valid_till_capture(child_array, 0, 0, 1, 1)
+
+    add_if_valid_till_capture(child_array, 1, 1, 1, 1)
+
+    add_if_valid_till_capture(child_array, 1, 1, 0, 0)
+
+    add_if_valid_till_capture(child_array, 1, 1, -1, -1)
+
+    add_if_valid_till_capture(child_array, 0, 0, -1, -1)
+
+    add_if_valid_till_capture(child_array, -1, -1, -1, -1)
+
+    add_if_valid_till_capture(child_array, -1, -1, 0, 0)
+
+    add_if_valid_till_capture(child_array, -1, -1, 1, 1)
+
+    return child_array
+  end
 end
 
 class King < Piece
