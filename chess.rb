@@ -713,7 +713,8 @@ class Player
           return true
         end
       end
-    end   
+    end 
+    return false  
   end
 
   def move_would_cause_check?
