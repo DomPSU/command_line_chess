@@ -39,9 +39,13 @@ class GameController
     announce_colors
 
     @current_player = @white
+
     while ((checkmate? == false) && (draw? == false))
       @display.contents
       announce_current_player
+
+      current_player.info #just for testing.
+
       @current_player.get_move
       puts ("")
       switch_current_player #REFACTOR
@@ -430,7 +434,7 @@ class Piece
     board_square = @board.get_square_from_index(new_l_n_index, new_n_n_index)
 
     if board_square.piece == nil
-      
+      #skip
     elsif board_square.piece.color == parent_color
       return false
     end
@@ -645,13 +649,37 @@ end
 class Player
   include ChessConstants
 
-  attr_accessor :board, :name, :piece_color
+  attr_accessor :board, :name, :piece_color, :board_squares_occupied
 
   def initialize(board, name = nil)
     @board = board
     @name = name
     @piece_color = nil
+    @board_squares_occupied = get_board_square_array
   end
+  
+  def get_board_square_array
+    array = []
+
+    @board.array.each do |sub_array|        
+      sub_array.each do |board_square|
+        if board_square.piece == nil
+          #skip
+        elsif @piece_color == board_square.piece.color
+          array << board_square
+        end
+      end
+    end
+    return array
+  end
+
+  def info #test function
+    @board_squares_occupied = get_board_square_array
+    @board_squares_occupied.each do |board_square|
+      puts("#{board_square.piece} #{board_square.piece.color}")
+    end 
+  end
+
 
   def valid_piece_to_move?(l_notation, n_notation) #REFACTOR
     board_square = @board.get_square_from_notation(l_notation, n_notation)
