@@ -652,7 +652,7 @@ class Player
   include ChessConstants
 
   attr_accessor :board, :name, :piece_color, :board_squares,
-                :opponent_board_squares, :king_check 
+                :opponent_board_squares, :king_check
     #idk if board_squares and o_b_s needs to be an instance variable. Can maybe be hidden.
 
   def initialize(board, name = nil)
@@ -717,7 +717,17 @@ class Player
     return false  
   end
 
-  def move_would_cause_check?
+  def move_would_cause_check?(board_square) #REFACTOR
+    saved_piece = board_square.piece
+
+    board_square.piece = nil
+ 
+    if king_in_check? == true      #ternary operator?
+      board_square.piece = saved_piece
+      return true
+    end
+    board_square.piece = saved_piece
+    return false
   end
 
   def info #TEST function
@@ -773,10 +783,15 @@ class Player
 
       return false  
     end
-  
-    #return false unless piece.child array contains move to prevent check
 
-    #movement will not cause check
+    if move_would_cause_check?(board_square) == true
+      puts "Moving this piece would cause check."
+      puts ""
+ 
+      return false
+    end
+
+    #return false unless piece.child array contains move to prevent check
 
     #king cannot move into check
 
