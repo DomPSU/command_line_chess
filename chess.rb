@@ -447,6 +447,22 @@ class Piece
     end
    return false
   end
+
+  def add_if_valid_till_capture(child_array, starting_l_index_shift,
+       l_index_increment, starting_n_index_shift, n_index_increment)
+
+    l_index = starting_l_index_shift
+    n_index = starting_n_index_shift
+
+    while add_if_valid(child_array, l_index, n_index) == true
+      l_index = l_index + l_index_increment
+      n_index = n_index + n_index_increment
+
+      if child_array[-1].piece != nil
+        break
+      end
+    end
+  end
 end
 
 class Knight < Piece
@@ -498,41 +514,13 @@ class Rook < Piece
   def get_child_array   
     child_array = []
 
-    index = 1
+    add_if_valid_till_capture(child_array, 0, 0, 1, 1)
 
-    while add_if_valid(child_array, 0, index) == true
-      index += 1
-      if child_array[-1].piece != nil
-        break
-      end
-    end
+    add_if_valid_till_capture(child_array, 1, 1, 0, 0)
 
-    index = 1
+    add_if_valid_till_capture(child_array, 0, 0, -1, -1)
 
-    while add_if_valid(child_array, index, 0) == true
-      index += 1
-      if child_array[-1].piece != nil
-        break
-      end
-    end
-
-    index = -1
-
-    while add_if_valid(child_array, 0, index) == true
-      index -= 1
-      if child_array[-1].piece != nil
-        break
-      end
-    end
-
-    index = -1
-
-    while add_if_valid(child_array, index, 0) == true
-      index -= 1
-      if child_array[-1].piece != nil
-        break
-      end
-    end
+    add_if_valid_till_capture(child_array, -1, -1, 0, 0)
 
     return child_array
   end
