@@ -720,14 +720,6 @@ class Player
   #or bishop can just capture piece. 
   #maybe this is not even needed
 
-  def move_would_cause_check?(piece, new_board_square) #FIXXXXXX
-    simulate_move(piece, new_board_square, true)  
-  end
-
-  def move_removes_check? (piece, new_board_square) #REFACTOR
-    simulate_move(piece, new_board_square, false) 
-  end
-
   def piece_can_prevent_check?(starting_board_square) #REFACTOR
     
     child_array = starting_board_square.piece.get_child_array
@@ -751,22 +743,26 @@ class Player
     return false
   end
 
-  def simulate_move(piece, new_board_square, king_in_check_equality)
-    return_value = false
+  def move_leads_to_check? (piece, new_board_square)
+    return_value = nil
 
     starting_board_square = @board.get_square_from_piece(piece)
-    
+  
+    #save original position  
     saved_starting_piece = starting_board_square.piece
     saved_new_board_square_piece = new_board_square.piece
 
+    #simulate new position
     starting_board_square.piece = nil
     new_board_square.piece = saved_starting_piece
 
-    return_value = true if king_in_check? == king_in_check_equality
+    return_value = king_in_check?
 
+    #return to orginal position
     new_board_square.piece = saved_new_board_square_piece
     starting_board_square.piece = saved_starting_piece
-    return return_value    
+
+    return return_value 
   end
 
   def info #TEST function
@@ -845,7 +841,7 @@ class Player
     end
 
     if ((king_in_check? == true) && 
-       (move_removes_check?(piece, board_square) == false))
+       (move_leads_to_check?(piece, board_square) == true))
 
       puts "Piece must remove check. Please pick a move that prevents check."
       puts ""
@@ -853,7 +849,7 @@ class Player
       return false 
     end
 
-    if move_would_cause_check?(piece, board_square) == true #FIXXXX
+    if move_leads_to_check?(piece, board_square) == true
       puts "Move would cause check. Please pick a move that does not cause "\
            "check."
       puts ""
