@@ -694,23 +694,13 @@ class Player
     return @opponent_board_squares
   end
 
-  def king_in_check? #FIX?? and REFACTOR
-    update_opponent_board_squares #this update may be unncessary
+  def king_in_check?
+    update_opponent_board_squares 
 
     @opponent_board_squares.each do |board_square| 
       child_array = board_square.piece.get_child_array
       child_array.each do |child|
-=begin
-        if child.piece == nil
-          puts ("no piece.")
-        elsif
-          puts ("#{child.piece} #{child.color}")
-        end
-=end
-        if child.piece.class == King
-          puts ("KING IS IN CHECK")
-          return true
-        end
+          return true if child.piece.class == King
       end
     end 
     return false  
