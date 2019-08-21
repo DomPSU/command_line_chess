@@ -706,12 +706,9 @@ class Player
     return false  
   end
 
-  #this most likely does not handle case of bishop can move toward piece causing check.
-  #or bishop can just capture piece. 
-  #maybe this is not even needed
+  def piece_can_prevent_check?(starting_board_square)
+    return_value = false
 
-  def piece_can_prevent_check?(starting_board_square) #REFACTOR
-    
     child_array = starting_board_square.piece.get_child_array
 
     saved_starting_piece = starting_board_square.piece
@@ -720,17 +717,16 @@ class Player
 
     child_array.each do |new_board_square|
       saved_new_board_square_piece = new_board_square.piece
+   
       new_board_square.piece = saved_starting_piece
-      if king_in_check? == false
-        new_board_square.piece = saved_new_board_square_piece
-        starting_board_square.piece = saved_starting_piece
-        return true
-      end
+
+      return_value = true if king_in_check? == false
+
       new_board_square.piece = saved_new_board_square_piece
     end
 
     starting_board_square.piece = saved_starting_piece
-    return false
+    return return_value
   end
 
   def move_leads_to_check? (piece, new_board_square)
