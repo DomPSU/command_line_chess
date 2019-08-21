@@ -41,7 +41,7 @@ class GameController
     @current_player = @white
 
     while ((checkmate? == false) && (draw? == false))
-      #current_player.info #just for testing.
+      #current_player.info                   #just for testing.
 
       @display.contents
       announce_current_player
@@ -427,18 +427,16 @@ class Piece
     return N_ARRAY.index(parent_square.n_notation)
   end
 
-  def valid_move?(parent_color, child_array, new_l_n_index, new_n_n_index) #REFACTOR
+  def valid_move?(parent_color, child_array, new_l_n_index, new_n_n_index)
 
     return false if square_index_exists?(new_l_n_index, new_n_n_index) == false
     board_square = @board.get_square_from_index(new_l_n_index, new_n_n_index)
 
     if board_square.piece == nil
-      #skip
+      return true
     elsif board_square.piece.color == parent_color
       return false
     end
-
-    return true
   end
 
   def add_if_valid(child_array, l_index_shift, n_index_shift)
