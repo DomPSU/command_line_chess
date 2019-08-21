@@ -781,7 +781,7 @@ class Player
     puts(king_in_check?)
   end
 
-  def valid_piece_to_move?(l_notation, n_notation) #REFACTOR??
+  def valid_piece_to_move?(l_notation, n_notation)
     board_square = @board.get_square_from_notation(l_notation, n_notation)
 
     if board_square.piece == nil
@@ -806,7 +806,7 @@ class Player
     end
 
     if ((king_in_check? == true) &&
-       (piece_can_prevent_check?(board_square) == false)) #REFACTOR??
+       (piece_can_prevent_check?(board_square) == false))
 
       puts "King is in check and piece cannot prevent."
       puts ""
@@ -875,7 +875,7 @@ class Person < Player
   end
   
   def get_piece_to_move #TODO use yield to make one single function
-    puts "Please use correct notation. (eg. e4)" #castle short, castle long
+    puts "Please use correct notation. (eg. e4)" 
     puts ""
   
     loop do
