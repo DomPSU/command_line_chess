@@ -433,10 +433,11 @@ class Piece
     board_square = @board.get_square_from_index(new_l_n_index, new_n_n_index)
 
     if board_square.piece == nil
-      return true
+      #skip
     elsif board_square.piece.color == parent_color
       return false
     end
+    return true
   end
 
   def add_if_valid(child_array, l_index_shift, n_index_shift)
