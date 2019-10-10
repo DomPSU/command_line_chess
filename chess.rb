@@ -300,7 +300,7 @@ class Board
     @array[1][0] = BoardSquare.new("a", "7", "black", Pawn.new("black", self))
     @array[1][1] = BoardSquare.new("b", "7", "white", Pawn.new("black", self))
     @array[1][2] = BoardSquare.new("c", "7", "black", Pawn.new("black", self))
-    @array[1][3] = BoardSquare.new("d", "7", "white")#, Pawn.new("black", self))
+    @array[1][3] = BoardSquare.new("d", "7", "white", Pawn.new("black", self))
     @array[1][4] = BoardSquare.new("e", "7", "black", Pawn.new("black", self))
     @array[1][5] = BoardSquare.new("f", "7", "white", Pawn.new("black", self))
     @array[1][6] = BoardSquare.new("g", "7", "black", Pawn.new("black", self))
@@ -344,7 +344,7 @@ class Board
 
     @array[6][0] = BoardSquare.new("a", "2", "white", Pawn.new("white", self))
     @array[6][1] = BoardSquare.new("b", "2", "black", Pawn.new("white", self))
-    @array[6][2] = BoardSquare.new("c", "2", "white")#, Pawn.new("white", self))
+    @array[6][2] = BoardSquare.new("c", "2", "white", Pawn.new("white", self))
     @array[6][3] = BoardSquare.new("d", "2", "black", Pawn.new("white", self))
     @array[6][4] = BoardSquare.new("e", "2", "white", Pawn.new("white", self))
     @array[6][5] = BoardSquare.new("f", "2", "black", Pawn.new("white", self))
